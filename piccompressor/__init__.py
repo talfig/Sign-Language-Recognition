@@ -1,26 +1,9 @@
-import os
-import cv2
-import numpy as np
+# mypackage/__init__.py
 
 
-# Resize and save images in compressed .npz format
-def preprocess_and_save(dataset_dir, output_file, size=(200, 200)):
-    images = []
-
-    for filename in os.listdir(dataset_dir):
-        filepath = os.path.join(dataset_dir, filename)
-
-        # Read and resize image
-        image = cv2.imread(filepath)
-        resized_image = cv2.resize(image, size)
-
-        # Add to list of images
-        images.append(resized_image)
-
-    # Convert to numpy array and save
-    images_np = np.array(images)
-    np.savez_compressed(output_file, images_np)
+# Import specific functions from submodules to make them accessible directly
+from .compression import preprocess_and_save
 
 
-# Usage example
-preprocess_and_save('path_to_dataset', 'compressed_dataset.npz')
+def init():
+    preprocess_and_save('path_to_dataset', 'compressed_dataset.npz', size=(200, 200))
