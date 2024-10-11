@@ -27,4 +27,4 @@ def load_and_display_images(npz_file, num_images=5):
 
 if __name__ == "__main__":
     # Example usage
-    load_and_display_images('data/compressed_asl.npz', num_images=5)
+    load_and_display_images('data/compressed_asl_crop.npz', num_images=5)
