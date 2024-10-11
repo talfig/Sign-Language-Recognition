@@ -1,4 +1,4 @@
-# mypackage/compression.py
+# mypackage/compressor.py
 
 import os
 import cv2
@@ -6,7 +6,7 @@ import numpy as np
 
 
 # Resize and save images in compressed .npz format
-def preprocess_and_save(dataset_dir, output_file, size=(200, 200)):
+def compress2npz(dataset_dir, output_file, size=(200, 200)):
     images = []
 
     for filename in os.listdir(dataset_dir):
