@@ -1,4 +1,4 @@
-# mypackage/datacompressor.py
+# mypackage/data_compressor.py
 
 
 import os
