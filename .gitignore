@@ -1,3 +1,9 @@
+# Ignore IDE and Python cache directories
+.idea/
+.venv/
+__pycache__/
+
+# Ignore project-specific directories
 ASL/
 ASL-crop/
 data/
