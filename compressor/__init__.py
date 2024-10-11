@@ -6,4 +6,4 @@ from .datacompressor import compress2npz
 
 
 def init():
-    compress2npz('path_to_dataset', 'compressed_dataset.npz', size=(200, 200))
+    compress2npz('path_to_dataset', 'compressed_dataset.npz')

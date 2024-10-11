@@ -7,19 +7,30 @@ import numpy as np
 
 
 # Resize and save images in compressed .npz format
-def compress2npz(dataset_dir, output_file, size=(200, 200)):
+def compress2npz(dataset_dir, output_file):
     images = []
+    labels = []
 
-    for filename in os.listdir(dataset_dir):
-        filepath = os.path.join(dataset_dir, filename)
+    # Loop through each class directory
+    for label in os.listdir(dataset_dir):
+        class_dir = os.path.join(dataset_dir, label)
 
-        # Read and resize image
-        image = cv2.imread(filepath)
-        resized_image = cv2.resize(image, size)
+        # Ensure the directory is a valid folder
+        if os.path.isdir(class_dir):
+            for filename in os.listdir(class_dir):
+                filepath = os.path.join(class_dir, filename)
 
-        # Add to list of images
-        images.append(resized_image)
+                # Read and resize image
+                image = cv2.imread(filepath)
 
-    # Convert to numpy array and save
+                # Ensure the image was read successfully
+                if image is not None:
+                    images.append(image)
+                    labels.append(label)  # Append the label (class name)
+
+    # Convert to numpy arrays and save
     images_np = np.array(images)
-    np.savez_compressed(output_file, images_np)
+    labels_np = np.array(labels)
+
+    # Save both images and labels in a structured array
+    np.savez_compressed(output_file, images=images_np, labels=labels_np)
