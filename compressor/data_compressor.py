@@ -1,4 +1,4 @@
-# mypackage/data_compressor.py
+# compressor/data_compressor.py
 
 
 import os
@@ -28,7 +28,7 @@ def compress2npz(dataset_dir, output_file, image_size=(200, 200)):
 
                 # Ensure the image was read successfully
                 if image is not None:
-                    # Resize the image to 400x400
+                    # Resize the image to the specified size
                     image_resized = cv2.resize(image, image_size)
                     images.append(image_resized)
                     labels.append(label)  # Append the label (class name)

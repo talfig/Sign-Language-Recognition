@@ -4,5 +4,7 @@ opencv-python
 numpy
 torch
 torchvision
+torchsummary
 Pillow
+scikit-learn
 tensorflow
