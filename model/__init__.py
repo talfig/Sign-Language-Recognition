@@ -3,3 +3,5 @@
 
 # Import specific functions from submodules to make them accessible directly
 from model.CustomCNNs import *
+from model.CustomLSTM import *
+from model.GestureModel import *
