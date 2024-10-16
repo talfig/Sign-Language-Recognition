@@ -1,4 +1,4 @@
 # test/__init__.py
 
 
-from evaluate_model import *
+from test.evaluate_model import *

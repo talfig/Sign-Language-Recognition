@@ -30,7 +30,7 @@ learning_rate = 0.001
 train_dataset = GestureDataset(X_train, y_train, transform=transform)
 train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
 
-test_dataset = GestureDataset(X_test, y_test, transform=transform)
+test_dataset = GestureDataset(X_test, y_test, train_dataset.label_map, transform=transform)
 test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
 
 # Initialize the model
@@ -42,9 +42,10 @@ model.to(device)
 loss_fn = nn.CrossEntropyLoss()
 optimizer = optim.Adam(model.parameters(), lr=learning_rate)
 
-# train_model(model, train_loader, num_epochs, loss_fn, optimizer, device)
+train_model(model, train_loader, num_epochs, loss_fn, optimizer, device)
 
-# Load the saved weights
-model.load_state_dict(torch.load('data/gesture_model_weights_epoch_10.pth', weights_only=True))
+# Load the model weights
+# state_dict = torch.load('data/gesture_model_weights.pth', weights_only=True, map_location=device)
+# model.load_state_dict(state_dict)
 
 evaluate_model(model, test_loader, device)

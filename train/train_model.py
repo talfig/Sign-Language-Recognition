@@ -24,7 +24,7 @@ def train_model(model, dataloader, num_epochs, loss_fn, optimizer, device):
             outputs = model(images)  # Forward pass with individual images
 
             # Calculate loss (ensure shapes are compatible)
-            loss = loss_fn(outputs, labels)  # No shape adjustment needed if labels and outputs are correct
+            loss = loss_fn(outputs, labels)
             loss.backward()
             optimizer.step()
 
