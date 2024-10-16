@@ -3,8 +3,8 @@ from torchvision import transforms
 from torch.utils.data import DataLoader
 from sklearn.model_selection import train_test_split
 
-from train.train_model import *
-from test.evaluate_model import *
+from train import *
+from test import *
 
 # Load the .npz dataset
 images, labels = decompress_npz('data/compressed_asl_crop.npz')
