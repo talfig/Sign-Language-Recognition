@@ -88,3 +88,7 @@ def train_evaluate():
     train_model(model, train_loader, num_epochs, loss_fn, optimizer, device)
 
     evaluate_model(model, test_loader, device)
+
+
+if __name__ == "__main__":
+    train_evaluate()
