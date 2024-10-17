@@ -19,7 +19,7 @@ sudo apt-get -y install cuda
 
 ### 2. Downloading and Installing cuDNN
 
-1. Visit the NVIDIA cuDNN library page: cuDNN Download.
+1. Visit the NVIDIA cuDNN library page: [cuDNN Download](https://developer.nvidia.com/cudnn).
 2. Download the cuDNN version compatible with your CUDA installation.
 3. Follow the installation steps based on your system. For Linux, use:
 
