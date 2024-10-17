@@ -16,7 +16,7 @@ mean = [0.485, 0.456, 0.406]
 std = [0.229, 0.224, 0.225]
 
 transform = transforms.Compose([
-    transforms.Resize((200, 200)),  # Resize images
+    transforms.Resize((224, 224)),  # Resize images
     transforms.ToTensor(),  # Convert to tensor
     transforms.Normalize(mean=mean, std=std)
 ])
@@ -43,9 +43,5 @@ loss_fn = nn.CrossEntropyLoss()
 optimizer = optim.Adam(model.parameters(), lr=learning_rate)
 
 train_model(model, train_loader, num_epochs, loss_fn, optimizer, device)
-
-# Load the model weights
-# state_dict = torch.load('data/gesture_model_weights.pth', weights_only=True, map_location=device)
-# model.load_state_dict(state_dict)
 
 evaluate_model(model, test_loader, device)
