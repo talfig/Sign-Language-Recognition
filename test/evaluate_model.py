@@ -1,12 +1,7 @@
 # test/evaluate_model.py
 
-
-from sklearn.metrics import accuracy_score, confusion_matrix
-import matplotlib.pyplot as plt
-import seaborn as sns
-
-from model import *
-from compressor import *
+from sklearn.metrics import accuracy_score
+from utils import *
 
 
 def evaluate_model(model, dataloader, device):
@@ -34,14 +29,4 @@ def evaluate_model(model, dataloader, device):
     print(f'Accuracy of the model on the test set: {accuracy * 100:.2f}%')
 
     # Confusion Matrix
-    conf_matrix = confusion_matrix(all_labels, all_preds)
-
-    # Plotting the confusion matrix
-    plt.figure(figsize=(10, 7))
-    sns.heatmap(conf_matrix, annot=True, fmt="d", cmap="Blues",
-                xticklabels=np.unique(all_labels),
-                yticklabels=np.unique(all_labels))
-    plt.xlabel('Predicted Label')
-    plt.ylabel('True Label')
-    plt.title('Confusion Matrix')
-    plt.show()
+    print_confusion_matrix(all_labels, all_preds)

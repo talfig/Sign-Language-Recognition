@@ -4,7 +4,8 @@ from sklearn.model_selection import train_test_split
 import torch.optim as optim
 
 from test import *
-from utils import *
+from compressor import *
+from model import *
 
 # Load the .npz dataset
 images, labels = decompress_npz('../data/compressed_asl_crop.npz')

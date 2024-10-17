@@ -5,6 +5,8 @@ from sklearn.model_selection import train_test_split
 
 from train import *
 from test import *
+from model import *
+from compressor import *
 
 # Load the .npz dataset
 images, labels = decompress_npz('data/compressed_asl_crop.npz')

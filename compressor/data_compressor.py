@@ -1,13 +1,12 @@
 # compressor/data_compressor.py
 
-
 import os
 import cv2
 import numpy as np
 
 
 # Resize and save images in compressed .npz format
-def compress2npz(dataset_dir, output_file, image_size=(200, 200)):
+def compress_to_npz(dataset_dir, output_file, image_size=(200, 200)):
     images = []
     labels = []
 

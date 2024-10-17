@@ -1,5 +1,4 @@
-# model/CustomCNNs.py
-
+# model/cnn_models.py
 
 import torch.nn as nn
 from torchvision.models import (
