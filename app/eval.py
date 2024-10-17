@@ -1,7 +1,3 @@
-from torchvision import transforms
-from torch.utils.data import DataLoader
-from sklearn.model_selection import train_test_split
-
 from test import *
 from compressor import *
 from model import *
