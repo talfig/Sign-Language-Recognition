@@ -1,9 +1,9 @@
 # model/gesture_dataset.py
 
+import torch
 import numpy as np
 from torch.utils.data import Dataset
-from PIL import Image
-from utils import *
+from utils.label_mapper import *
 
 
 class GestureDataset(Dataset):
@@ -45,7 +45,7 @@ class GestureDataset(Dataset):
 
         # Apply transformations if provided
         if self.transform:
-            image = self.transform(Image.fromarray(image))
+            image = self.transform(image)
 
         label = torch.tensor(label, dtype=torch.long)  # Convert label to tensor
 

@@ -17,13 +17,11 @@ def train_evaluate():
     # Split the images and labels into training and test sets
     X_train, X_test, y_train, y_test = train_test_split(images, labels, test_size=0.2, random_state=42)
 
-    mean = [0.485, 0.456, 0.406]
-    std = [0.229, 0.224, 0.225]
-
     transform = transforms.Compose([
+        transforms.ToPILImage(),
         transforms.Resize((224, 224)),  # Resize images
         transforms.ToTensor(),  # Convert to tensor
-        transforms.Normalize(mean=mean, std=std)
+        transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
     ])
 
     # Set up hyperparameters

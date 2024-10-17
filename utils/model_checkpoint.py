@@ -1,6 +1,6 @@
 # utils/model_checkpoint.py
 
-import torch
+from model import *
 
 
 def save_checkpoint(model, optimizer, epoch, loss, filepath):
@@ -14,11 +14,21 @@ def save_checkpoint(model, optimizer, epoch, loss, filepath):
     torch.save(checkpoint, filepath)
 
 
-def load_checkpoint(filepath, model, optimizer):
+def load_checkpoint(filepath, model, optimizer, device):
     # Load the checkpoint to resume training
     checkpoint = torch.load(filepath)
     model.load_state_dict(checkpoint['model_state_dict'])
+    model.to(device)
     optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
     epoch = checkpoint['epoch']
     loss = checkpoint['loss']
     return model, optimizer, epoch, loss
+
+
+def load_model(filepath, device):
+    num_classes = len(string.digits) + len(string.ascii_uppercase)
+    model = CustomResnet18(num_classes)
+    state_dict = torch.load(filepath, weights_only=True)
+    model.load_state_dict(state_dict)
+    model.to(device)
+    return model
