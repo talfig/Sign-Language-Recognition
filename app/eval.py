@@ -1,7 +1,6 @@
 from torchvision import transforms
 from torch.utils.data import DataLoader
 from sklearn.model_selection import train_test_split
-import torch.optim as optim
 
 from test import *
 from compressor import *
