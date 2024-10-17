@@ -13,12 +13,10 @@ images, labels = decompress_npz('../data/compressed_asl_crop.npz')
 # Split the images and labels into training and test sets
 X_train, X_test, y_train, y_test = train_test_split(images, labels, test_size=0.2, random_state=42)
 
-# Load TorchScript model
+# Load the model weights
 model = CustomResnet18(len(np.unique(labels)))
-filepath = '../data/checkpoint_epoch_10.pth'
-optimizer = optim.Adam(model.parameters(), lr=0.001)
-
-load_checkpoint(filepath, model, optimizer)
+state_dict = torch.load('../data/gesture_model_weights_epoch_10.pth', weights_only=True)
+model.load_state_dict(state_dict)
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 model.to(device)
 
@@ -31,9 +29,7 @@ transform = transforms.Compose([
     transforms.Normalize(mean=mean, std=std)
 ])
 
-batch_size = 100
-
 test_dataset = GestureDataset(X_test, y_test, transform=transform)
-test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
+test_loader = DataLoader(test_dataset, batch_size=100, shuffle=False)
 
 evaluate_model(model, test_loader, device)
