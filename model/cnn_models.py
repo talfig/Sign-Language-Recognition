@@ -1,6 +1,9 @@
 # model/cnn_models.py
 
+import torch
+import string
 import torch.nn as nn
+from torchsummary import summary
 from torchvision.models import (
     mobilenet_v2, MobileNet_V2_Weights,
     resnet18, ResNet18_Weights
@@ -42,3 +45,16 @@ class CustomResnet18(nn.Module):
 
     def forward(self, x):
         return self.base_model(x)
+
+
+if __name__ == "__main__":
+    # Total classes from digits (0-9) and uppercase letters (A-Z)
+    total_classes = len(string.digits) + len(string.ascii_uppercase)
+    model = CustomResnet18(total_classes)
+
+    # Move the models to the appropriate device (CPU or GPU)
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    model.to(device)
+
+    print("ResNet18 Summary:")
+    summary(model, (3, 224, 224))

@@ -47,3 +47,7 @@ def decompress_npz(npz_file):
     labels = data['labels']
 
     return images, labels
+
+
+if __name__ == "__main__":
+    compress_to_npz('../ASL-crop', '../data/compressed_asl_crop.npz')
