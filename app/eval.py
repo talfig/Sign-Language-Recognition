@@ -12,9 +12,6 @@ X_train, X_test, y_train, y_test = train_test_split(images, labels, test_size=0.
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 model = load_model('../data/gesture_model_weights_epoch_10.pth', device)
 
-mean = [0.485, 0.456, 0.406]
-std = [0.229, 0.224, 0.225]
-
 transform = transforms.Compose([
     transforms.ToPILImage(),
     transforms.Resize((224, 224)),  # Resize images
