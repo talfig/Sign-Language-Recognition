@@ -24,7 +24,7 @@ cap.set(4, frame_height)
 
 # Define constants
 PREDICTION_WINDOW = 5  # Number of frames to average over
-CONFIDENCE_THRESHOLD = 0.8  # Only consider predictions with confidence > 0.7
+CONFIDENCE_THRESHOLD = 0.7  # Only consider predictions with confidence > 0.7
 
 # Store the predictions in a queue for smoothing
 predictions_queue = deque(maxlen=PREDICTION_WINDOW)
