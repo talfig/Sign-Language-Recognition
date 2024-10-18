@@ -1,5 +1,7 @@
 # Sign-Language-Recognition
 
+(https://github.com/talfig/Sign-Language-Recognition/blob/main/ASL.jpg)
+
 ## CUDA and cuDNN Installation Guide for Project
 
 ### 1. Downloading and Installing CUDA
