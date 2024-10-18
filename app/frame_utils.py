@@ -81,3 +81,12 @@ def process_frame(frame, hands, model, transform, device):
         return predicted_sign, output
 
     return None, None
+
+
+def get_smoothed_prediction(predictions_queue, prediction_window):
+    if len(predictions_queue) == prediction_window:
+        # Calculate the mode (most frequent prediction in the window)
+        most_common_prediction = max(set(predictions_queue), key=predictions_queue.count)
+        return most_common_prediction
+    else:
+        return None  # Not enough frames for smoothing yet

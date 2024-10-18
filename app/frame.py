@@ -1,6 +1,7 @@
 # app/frame.py
 
 from torchvision import transforms
+from collections import deque
 from app.frame_utils import *
 from utils import *
 
@@ -20,6 +21,13 @@ frame_width = 640
 frame_height = 480
 cap.set(3, frame_width)
 cap.set(4, frame_height)
+
+# Define constants
+PREDICTION_WINDOW = 5  # Number of frames to average over
+CONFIDENCE_THRESHOLD = 0.8  # Only consider predictions with confidence > 0.7
+
+# Store the predictions in a queue for smoothing
+predictions_queue = deque(maxlen=PREDICTION_WINDOW)
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 model = load_model('../data/mobilenet_weights_epoch_10.pth', len(string.ascii_uppercase), device)
@@ -56,14 +64,23 @@ while True:
     if output_orig is not None and output_mirror is not None:
         # Take the maximum of the two outputs
         final_output = torch.max(output_orig, output_mirror)
-        _, final_prediction = torch.max(final_output, 1)
+        confidence, final_prediction = torch.max(final_output, 1)
 
-        # Get the predicted label for the final prediction
-        predicted_sign = LabelMapper.index_to_label(final_prediction.item())
+        # Ensure the prediction has high confidence
+        if confidence.item() > CONFIDENCE_THRESHOLD:
+            # Append the prediction to the queue
+            predictions_queue.append(final_prediction.item())
 
-        # Display the predicted sign on the frame
-        cv2.putText(frame, f"Predicted Sign: {predicted_sign}", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2,
-                    cv2.LINE_AA)
+            # Get the smoothed prediction
+            smoothed_prediction = get_smoothed_prediction(predictions_queue, PREDICTION_WINDOW)
+
+            if smoothed_prediction is not None:
+                # Get the predicted label for the smoothed prediction
+                predicted_sign = LabelMapper.index_to_label(smoothed_prediction)
+
+                # Display the predicted sign on the frame
+                cv2.putText(frame, f"Predicted Sign: {predicted_sign}", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1,
+                            (255, 0, 0), 2, cv2.LINE_AA)
 
     # If hand landmarks are detected, draw them on the mask
     if results.multi_hand_landmarks:
