@@ -21,11 +21,11 @@ frame_height = 480
 cap.set(3, frame_width)
 cap.set(4, frame_height)
 
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-model = load_model('../data/gesture_model_weights_epoch_10.pth', device)
-model.eval()  # Set the model to evaluation mode
+classes = list(string.ascii_uppercase)
 
-class_names = list(string.digits) + list(string.ascii_uppercase)
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+model = load_model('../data/model_weights_epoch_10.pth', len(classes), device)
+model.eval()  # Set the model to evaluation mode
 
 transform = transforms.Compose([
     transforms.ToPILImage(),
@@ -42,41 +42,33 @@ while True:
         print("Error: Could not read frame.")
         break
 
-    # Call the function to draw the rectangle on the frame
-    draw_bounding_rectangle(frame, frame_width, frame_height)
-
     # Convert the frame to RGB since Mediapipe works with RGB images
     rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
     # Process the frame to detect hands
     results = hands.process(rgb_frame)
 
-    # Create a mask for the hand region
-    mask = np.zeros(frame.shape, dtype=np.uint8)  # Create a black mask
-
     # If hand landmarks are detected, draw them on the mask
     if results.multi_hand_landmarks:
-        draw_hand_landmarks(frame, results.multi_hand_landmarks)
-
         for hand_landmarks in results.multi_hand_landmarks:
-            for landmark in hand_landmarks.landmark:
-                # Convert landmark coordinates to pixel coordinates
-                x = int(landmark.x * frame_width)
-                y = int(landmark.y * frame_height)
-                cv2.circle(mask, (x, y), 5, (255, 255, 255), -1)  # Draw white circles at landmarks
+            # Draw hand landmarks
+            draw_hand_landmarks(frame, hand_landmarks)
 
-        # Combine the mask with the original frame
-        filtered_frame = cv2.bitwise_and(frame, mask)
+            # Calculate the bounding rectangle based on hand landmarks
+            min_x, max_x, min_y, max_y = calculate_bounding_rectangle(hand_landmarks)
 
-        # Preprocess the filtered frame for model prediction
-        input_image = transform(filtered_frame).unsqueeze(0).to(device)  # Add batch dimension and move to device
+            # Draw the bounding rectangle directly on the frame
+            draw_bounding_rectangle(frame, min_x, max_x, min_y, max_y)
+
+        # Preprocess the frame with landmarks for model prediction
+        input_image = transform(frame).unsqueeze(0).to(device)  # Use the annotated frame
 
         # Make predictions using the model
         with torch.no_grad():
             output = model(input_image)
             _, predicted_class = torch.max(output, 1)  # Get the index of the highest prediction score
 
-        predicted_sign = class_names[predicted_class.item()]
+        predicted_sign = classes[predicted_class.item()]
 
         # Display the predicted sign on the frame
         cv2.putText(frame, f"Predicted Sign: {predicted_sign}", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2,

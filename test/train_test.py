@@ -12,7 +12,7 @@ from compressor import *
 
 def train_evaluate():
     # Load the .npz dataset
-    images, labels = decompress_npz('data/compressed_asl_crop.npz')
+    images, labels = decompress_npz('../data/compressed_asl_mediapipe.npz')
 
     # Split the images and labels into training and test sets
     X_train, X_test, y_train, y_test = train_test_split(images, labels, test_size=0.2, random_state=42)
@@ -30,10 +30,10 @@ def train_evaluate():
     batch_size = 100
     learning_rate = 0.001
 
-    train_dataset = GestureDataset(X_train, y_train, transform=transform)
+    train_dataset = ASLDataset(X_train, y_train, transform=transform)
     train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
 
-    test_dataset = GestureDataset(X_test, y_test, transform=transform)
+    test_dataset = ASLDataset(X_test, y_test, transform=transform)
     test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
 
     # Initialize the model

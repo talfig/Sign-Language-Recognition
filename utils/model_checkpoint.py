@@ -1,4 +1,5 @@
 # utils/model_checkpoint.py
+import string
 
 from model import *
 
@@ -25,8 +26,7 @@ def load_checkpoint(filepath, model, optimizer, device):
     return model, optimizer, epoch, loss
 
 
-def load_model(filepath, device):
-    num_classes = len(string.digits) + len(string.ascii_uppercase)
+def load_model(filepath, num_classes, device):
     model = CustomResnet18(num_classes)
     state_dict = torch.load(filepath, weights_only=True)
     model.load_state_dict(state_dict)

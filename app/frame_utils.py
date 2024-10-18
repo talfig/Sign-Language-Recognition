@@ -8,18 +8,34 @@ mp_hands = mp.solutions.hands
 mp_drawing = mp.solutions.drawing_utils
 
 
-# Function to draw a larger rectangle on the frame
-def draw_bounding_rectangle(frame, frame_width, frame_height):
-    # Adjust the coordinates to make the rectangle larger
-    top_left = (int(frame_width * 0.3), int(frame_height * 0.25))
-    bottom_right = (int(frame_width * 0.7), int(frame_height * 0.75))
+def calculate_bounding_rectangle(hand_landmarks):
+    # Extract x and y coordinates from all the landmarks
+    x_coords = [landmark.x for landmark in hand_landmarks.landmark]
+    y_coords = [landmark.y for landmark in hand_landmarks.landmark]
 
-    # Draw the larger rectangle on the frame (color: blue, thickness: 2)
+    # Calculate the min and max x and y coordinates
+    min_x = min(x_coords)
+    max_x = max(x_coords)
+    min_y = min(y_coords)
+    max_y = max(y_coords)
+
+    return min_x, max_x, min_y, max_y
+
+
+# Function to draw a rectangle using normalized landmark coordinates
+def draw_bounding_rectangle(frame, min_x, max_x, min_y, max_y):
+    # Get the width and height of the frame (assuming frame.shape contains [height, width, channels])
+    h, w, _ = frame.shape
+
+    # Convert normalized coordinates to pixel values based on frame dimensions
+    top_left = (int(min_x * w), int(min_y * h))  # Top-left corner
+    bottom_right = (int(max_x * w), int(max_y * h))  # Bottom-right corner
+
+    # Draw the rectangle on the frame (color: blue, thickness: 2)
     cv2.rectangle(frame, top_left, bottom_right, (255, 0, 0), 2)
 
 
 # Function to draw hand landmarks on the frame
-def draw_hand_landmarks(frame, landmarks):
+def draw_hand_landmarks(frame, hand_landmarks):
     # Draw landmarks on the frame
-    for hand_landmarks in landmarks:
-        mp_drawing.draw_landmarks(frame, hand_landmarks, mp_hands.HAND_CONNECTIONS)
+    mp_drawing.draw_landmarks(frame, hand_landmarks, mp_hands.HAND_CONNECTIONS)

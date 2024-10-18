@@ -8,8 +8,8 @@ class LabelMapper:
         """
         Initializes the LabelMapper by creating a label-to-index map and an index-to-label map.
         """
-        # Create a label set '0-9' and 'A-Z'
-        labels = list(string.digits) + list(string.ascii_uppercase)
+        # Create a label set 'A-Z'
+        labels = list(string.ascii_uppercase)
 
         # Create a label-to-index map
         self.label_to_index_map = {label: idx for idx, label in enumerate(labels)}

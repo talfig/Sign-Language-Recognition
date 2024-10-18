@@ -6,5 +6,6 @@ __pycache__/
 # Ignore project-specific directories
 ASL/
 ASL-crop/
+ASL-MediaPipe/
 data/
 compressor/__pycache__/

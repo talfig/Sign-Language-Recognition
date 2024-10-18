@@ -3,14 +3,11 @@ from compressor import *
 from model import *
 
 # Load the .npz dataset
-images, labels = decompress_npz('../data/compressed_asl_crop.npz')
-
-# Split the images and labels into training and test sets
-X_train, X_test, y_train, y_test = train_test_split(images, labels, test_size=0.2, random_state=42)
+X, y = decompress_npz('../data/compressed_asl_mediapipe.npz')
 
 # Load the model
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-model = load_model('../data/gesture_model_weights_epoch_10.pth', device)
+model = load_model('../data/model_weights_epoch_10.pth', len(string.ascii_uppercase), device)
 
 transform = transforms.Compose([
     transforms.ToPILImage(),
@@ -19,7 +16,7 @@ transform = transforms.Compose([
     transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
 ])
 
-test_dataset = GestureDataset(X_test, y_test, transform=transform)
+test_dataset = ASLDataset(X, y, transform=transform)
 test_loader = DataLoader(test_dataset, batch_size=100, shuffle=False)
 
 evaluate_model(model, test_loader, device)

@@ -6,7 +6,7 @@ import numpy as np
 
 
 # Resize and save images in compressed .npz format
-def compress_to_npz(dataset_dir, output_file, image_size=(200, 200)):
+def compress_to_npz(dataset_dir, output_file, image_size=(224, 224)):
     images = []
     labels = []
 
@@ -50,4 +50,6 @@ def decompress_npz(npz_file):
 
 
 if __name__ == "__main__":
-    compress_to_npz('../ASL-crop', '../data/compressed_asl_crop.npz')
+    compress_to_npz('../ASL-MediaPipe/DiPASL-S900/DiPASL-S900',
+                    '../data/compressed_asl_mediapipe.npz',
+                    image_size=(256, 256))

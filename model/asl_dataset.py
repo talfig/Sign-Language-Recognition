@@ -6,7 +6,7 @@ from torch.utils.data import Dataset
 from utils.label_mapper import *
 
 
-class GestureDataset(Dataset):
+class ASLDataset(Dataset):
     def __init__(self, images, labels, transform=None):
         """
         Initializes the dataset with images and labels.
