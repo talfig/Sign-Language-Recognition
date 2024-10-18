@@ -2,6 +2,7 @@
 
 import cv2
 import mediapipe as mp
+from utils import *
 
 # Initialize Mediapipe Hands and drawing utilities
 mp_hands = mp.solutions.hands
@@ -39,3 +40,44 @@ def draw_bounding_rectangle(frame, min_x, max_x, min_y, max_y):
 def draw_hand_landmarks(frame, hand_landmarks):
     # Draw landmarks on the frame
     mp_drawing.draw_landmarks(frame, hand_landmarks, mp_hands.HAND_CONNECTIONS)
+
+
+def process_frame(frame, hands, model, transform, device):
+    """
+    Process a given frame to detect hand landmarks, draw bounding rectangles, and make predictions using the model.
+
+    Args:
+        frame: The frame to be processed.
+        hands: The Mediapipe hands detection object.
+        model: The trained PyTorch model for prediction.
+        transform: The torchvision transform to preprocess the frame.
+        device: The device (e.g., 'cuda' or 'cpu') for model inference.
+
+    Returns:
+        final_prediction: The predicted sign for the frame.
+        output: The model's output for further comparison.
+    """
+    # Convert the frame to RGB since Mediapipe works with RGB images
+    rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+
+    # Process the frame to detect hands
+    results = hands.process(rgb_frame)
+
+    if results.multi_hand_landmarks:
+        for hand_landmarks in results.multi_hand_landmarks:
+            # Draw hand landmarks
+            draw_hand_landmarks(frame, hand_landmarks)
+
+        # Preprocess the frame with landmarks for model prediction
+        input_image = transform(frame).unsqueeze(0).to(device)
+
+        # Make predictions using the model
+        with torch.no_grad():
+            output = model(input_image)
+            _, predicted_class = torch.max(output, 1)  # Get the index of the highest prediction score
+
+        predicted_sign = LabelMapper.index_to_label(predicted_class.item())
+
+        return predicted_sign, output
+
+    return None, None

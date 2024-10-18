@@ -40,6 +40,25 @@ while True:
         print("Error: Could not read frame.")
         break
 
+    # Create a mirrored version of the frame
+    mirrored_frame = cv2.flip(frame, 1)  # Flip horizontally to create the mirror effect
+
+    # Process both the original and mirrored frames
+    predicted_sign_orig, output_orig = process_frame(frame, hands, model, transform, device)
+    predicted_sign_mirror, output_mirror = process_frame(mirrored_frame, hands, model, transform, device)
+
+    if output_orig is not None and output_mirror is not None:
+        # Take the maximum of the two outputs
+        final_output = torch.max(output_orig, output_mirror)
+        _, final_prediction = torch.max(final_output, 1)
+
+        # Get the predicted label for the final prediction
+        predicted_sign = LabelMapper.index_to_label(final_prediction.item())
+
+        # Display the predicted sign on the frame
+        cv2.putText(frame, f"Predicted Sign: {predicted_sign}", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2,
+                    cv2.LINE_AA)
+
     # Convert the frame to RGB since Mediapipe works with RGB images
     rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
@@ -49,28 +68,11 @@ while True:
     # If hand landmarks are detected, draw them on the mask
     if results.multi_hand_landmarks:
         for hand_landmarks in results.multi_hand_landmarks:
-            # Draw hand landmarks
-            draw_hand_landmarks(frame, hand_landmarks)
-
             # Calculate the bounding rectangle based on hand landmarks
             min_x, max_x, min_y, max_y = calculate_bounding_rectangle(hand_landmarks)
 
             # Draw the bounding rectangle directly on the frame
             draw_bounding_rectangle(frame, min_x, max_x, min_y, max_y)
-
-        # Preprocess the frame with landmarks for model prediction
-        input_image = transform(frame).unsqueeze(0).to(device)  # Use the annotated frame
-
-        # Make predictions using the model
-        with torch.no_grad():
-            output = model(input_image)
-            _, predicted_class = torch.max(output, 1)  # Get the index of the highest prediction score
-
-        predicted_sign = LabelMapper.index_to_label(predicted_class.item())
-
-        # Display the predicted sign on the frame
-        cv2.putText(frame, f"Predicted Sign: {predicted_sign}", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2,
-                    cv2.LINE_AA)
 
     # Display the frame with the landmarks
     cv2.imshow('Hand Detection with Mediapipe', frame)
