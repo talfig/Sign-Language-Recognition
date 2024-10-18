@@ -1,4 +1,4 @@
-# Sign-Language-Recognition
+<h1 align="center"> Sign-Language-Recognition </h1>
 
 <p align="center">
     <a href="https://github.com/talfig/Assembler">
