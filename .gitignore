@@ -7,5 +7,7 @@ __pycache__/
 ASL/
 ASL-crop/
 ASL-MediaPipe/
-data/
+data/compressed_asl.npz
+data/compressed_asl_crop.npz
+data/compressed_asl_mediapipe.npz
 compressor/__pycache__/

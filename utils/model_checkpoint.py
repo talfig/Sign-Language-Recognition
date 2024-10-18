@@ -26,7 +26,7 @@ def load_checkpoint(filepath, model, optimizer, device):
 
 
 def load_model(filepath, num_classes, device):
-    model = CustomResnet18(num_classes)
+    model = CustomMobileNetV2(num_classes)
     state_dict = torch.load(filepath, weights_only=True)
     model.load_state_dict(state_dict)
     model.to(device)

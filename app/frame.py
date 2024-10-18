@@ -22,7 +22,7 @@ cap.set(3, frame_width)
 cap.set(4, frame_height)
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-model = load_model('../data/model_weights_epoch_10.pth', len(string.ascii_uppercase), device)
+model = load_model('../data/mobilenet_weights_epoch_10.pth', len(string.ascii_uppercase), device)
 model.eval()  # Set the model to evaluation mode
 
 transform = transforms.Compose([

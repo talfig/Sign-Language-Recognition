@@ -37,7 +37,7 @@ def train_evaluate():
     test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
 
     # Initialize the model
-    model = CustomResnet18(num_classes=num_classes)
+    model = CustomMobileNetV2(num_classes=num_classes)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model.to(device)
 
