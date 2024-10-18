@@ -1,6 +1,4 @@
 from test import *
-from compressor import *
-from model import *
 
 # Load the .npz dataset
 X, y = decompress_npz('../data/compressed_asl_mediapipe.npz')

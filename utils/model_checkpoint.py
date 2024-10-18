@@ -1,5 +1,4 @@
 # utils/model_checkpoint.py
-import string
 
 from model import *
 

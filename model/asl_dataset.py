@@ -20,11 +20,8 @@ class ASLDataset(Dataset):
         self.labels = labels  # Corresponding labels
         self.transform = transform
 
-        # Instantiate LabelMapper
-        self.label_mapper = LabelMapper()
-
         # Convert labels to numerical format
-        self.numerical_labels = np.array([self.label_mapper.label_to_index(label) for label in labels])
+        self.numerical_labels = np.array([LabelMapper.label_to_index(label) for label in labels])
 
     def __len__(self):
         """Returns the number of samples in the dataset."""

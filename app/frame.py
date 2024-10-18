@@ -21,10 +21,8 @@ frame_height = 480
 cap.set(3, frame_width)
 cap.set(4, frame_height)
 
-classes = list(string.ascii_uppercase)
-
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-model = load_model('../data/model_weights_epoch_10.pth', len(classes), device)
+model = load_model('../data/model_weights_epoch_10.pth', len(string.ascii_uppercase), device)
 model.eval()  # Set the model to evaluation mode
 
 transform = transforms.Compose([
@@ -68,7 +66,7 @@ while True:
             output = model(input_image)
             _, predicted_class = torch.max(output, 1)  # Get the index of the highest prediction score
 
-        predicted_sign = classes[predicted_class.item()]
+        predicted_sign = LabelMapper.index_to_label(predicted_class.item())
 
         # Display the predicted sign on the frame
         cv2.putText(frame, f"Predicted Sign: {predicted_sign}", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2,

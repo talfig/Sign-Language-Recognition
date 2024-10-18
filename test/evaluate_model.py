@@ -24,9 +24,13 @@ def evaluate_model(model, dataloader, device):
             all_preds.extend(preds.cpu().numpy())  # Append predictions
             all_labels.extend(labels.cpu().numpy())  # Append true labels
 
+    # Convert indexes to real class labels
+    all_preds_labels = [LabelMapper.index_to_label(pred) for pred in all_preds]
+    all_labels_labels = [LabelMapper.index_to_label(label) for label in all_labels]
+
     # Calculate accuracy
-    accuracy = accuracy_score(all_labels, all_preds)
+    accuracy = accuracy_score(all_labels_labels, all_preds_labels)
     print(f'Accuracy of the model on the test set: {accuracy * 100:.2f}%')
 
     # Confusion Matrix
-    print_confusion_matrix(all_labels, all_preds)
+    print_confusion_matrix(all_labels_labels, all_preds_labels)
