@@ -1,6 +1,6 @@
 # Sign-Language-Recognition
 
-(https://github.com/talfig/Sign-Language-Recognition/blob/main/ASL.jpg)
+<img src="https://github.com/talfig/Sign-Language-Recognition/blob/main/ASL.jpg" alt="ASL alphabet">
 
 ## CUDA and cuDNN Installation Guide for Project
 
