@@ -40,6 +40,12 @@ while True:
         print("Error: Could not read frame.")
         break
 
+    # Convert the frame to RGB since Mediapipe works with RGB images
+    rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+
+    # Process the frame to detect hands
+    results = hands.process(rgb_frame)
+
     # Create a mirrored version of the frame
     mirrored_frame = cv2.flip(frame, 1)  # Flip horizontally to create the mirror effect
 
@@ -58,12 +64,6 @@ while True:
         # Display the predicted sign on the frame
         cv2.putText(frame, f"Predicted Sign: {predicted_sign}", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2,
                     cv2.LINE_AA)
-
-    # Convert the frame to RGB since Mediapipe works with RGB images
-    rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-
-    # Process the frame to detect hands
-    results = hands.process(rgb_frame)
 
     # If hand landmarks are detected, draw them on the mask
     if results.multi_hand_landmarks:
