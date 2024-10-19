@@ -82,6 +82,11 @@ while True:
                 cv2.putText(frame, f"Predicted Sign: {predicted_sign}", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1,
                             (255, 0, 0), 2, cv2.LINE_AA)
 
+    elif output_orig is None and output_mirror is None:
+        # Display the predicted sign on the frame
+        cv2.putText(frame, "No hands detected", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1,
+                    (255, 0, 0), 2, cv2.LINE_AA)
+
     # If hand landmarks are detected, draw them on the mask
     if results.multi_hand_landmarks:
         for hand_landmarks in results.multi_hand_landmarks:
