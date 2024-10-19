@@ -10,9 +10,9 @@ from train import *
 from compressor import *
 
 
-def train_evaluate():
+def train_evaluate(npz_file):
     # Load the .npz dataset
-    images, labels = decompress_npz('../data/compressed_asl_mediapipe.npz')
+    images, labels = decompress_npz(npz_file)
 
     # Split the images and labels into training and test sets
     X_train, X_test, y_train, y_test = train_test_split(images, labels, test_size=0.2, random_state=42)
@@ -51,4 +51,4 @@ def train_evaluate():
 
 
 if __name__ == "__main__":
-    train_evaluate()
+    train_evaluate('../data/compressed_asl_crop.npz')

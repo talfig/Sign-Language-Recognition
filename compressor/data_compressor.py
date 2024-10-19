@@ -50,6 +50,5 @@ def decompress_npz(npz_file):
 
 
 if __name__ == "__main__":
-    compress_to_npz('../ASL-MediaPipe/DiPASL-S900/DiPASL-S900',
-                    '../data/compressed_asl_mediapipe.npz',
-                    image_size=(256, 256))
+    compress_to_npz('../ASL-crop', '../data/compressed_asl_crop.npz',
+                    image_size=(400, 400))

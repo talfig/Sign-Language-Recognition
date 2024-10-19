@@ -24,9 +24,11 @@ class HandDetectionApp:
         self.CONFIDENCE_THRESHOLD = 0.7  # Only consider predictions with confidence > 0.7
         self.predictions_queue = deque(maxlen=self.PREDICTION_WINDOW)
 
+        num_classes = len(string.digits) + len(string.ascii_uppercase)
+
         # Set up the model
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        self.model = load_model('../data/mobilenet_weights_epoch_10.pth', len(string.ascii_uppercase), self.device)
+        self.model = load_model('../data/asl_crop_mobilenet_weights_epoch_10.pth', num_classes, self.device)
         self.model.eval()
 
         # Set up image transformations
@@ -104,49 +106,27 @@ class HandDetectionApp:
                 print("Error: Could not read frame.")
                 pass
 
-            # Convert the frame to RGB since Mediapipe works with RGB images
-            rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            # Call the function to detect hand landmarks
+            detect_hand_landmarks(frame, self.hands)
 
-            # Process the frame to detect hands
-            results = self.hands.process(rgb_frame)
+            # Process the frame
+            confidence, predicted_sign = process_frame(frame, self.hands, self.model, self.transform, self.device)
 
-            # Create a mirrored version of the frame
-            mirrored_frame = cv2.flip(frame, 1)  # Flip horizontally to create the mirror effect
-
-            # Process both the original and mirrored frames
-            predicted_sign_orig, output_orig = process_frame(frame, self.hands, self.model, self.transform, self.device)
-            predicted_sign_mirror, output_mirror = process_frame(mirrored_frame, self.hands, self.model, self.transform, self.device)
-
-            if output_orig is not None and output_mirror is not None:
-                # Take the maximum of the two outputs
-                final_output = torch.max(output_orig, output_mirror)
-                confidence, final_prediction = torch.max(final_output, 1)
-
+            if predicted_sign is not None:
                 # Ensure the prediction has high confidence
                 if confidence.item() > self.CONFIDENCE_THRESHOLD:
                     # Append the prediction to the queue
-                    self.predictions_queue.append(final_prediction.item())
+                    self.predictions_queue.append(predicted_sign)
 
                     # Get the smoothed prediction
-                    smoothed_prediction = get_smoothed_prediction(self.predictions_queue, self.PREDICTION_WINDOW)
+                    smoothed_prediction = smooth_predictions(self.predictions_queue, self.PREDICTION_WINDOW)
 
                     if smoothed_prediction is not None:
-                        # Get the predicted label for the smoothed prediction
-                        predicted_sign = LabelMapper.index_to_label(smoothed_prediction)
-                        self.predicted_label.config(text=f"Predicted Sign: {predicted_sign}")
+                        self.predicted_label.config(text=f"Predicted Sign: {smoothed_prediction}")
 
-            elif output_orig is None and output_mirror is None:
+            else:
                 # Display the predicted sign on the frame
                 self.predicted_label.config(text="No hands detected")
-
-            # If hand landmarks are detected, draw them on the mask
-            if results.multi_hand_landmarks:
-                for hand_landmarks in results.multi_hand_landmarks:
-                    # Calculate the bounding rectangle based on hand landmarks
-                    min_x, max_x, min_y, max_y = calculate_bounding_rectangle(hand_landmarks)
-
-                    # Draw the bounding rectangle directly on the frame
-                    draw_bounding_rectangle(frame, min_x, max_x, min_y, max_y)
 
             # Convert the frame to ImageTk format
             img = Image.fromarray(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
