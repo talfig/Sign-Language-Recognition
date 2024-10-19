@@ -48,8 +48,8 @@ class CustomResnet34(nn.Module):
 
 
 if __name__ == "__main__":
-    # Total classes from digits (0-9) and uppercase letters (A-Z)
-    total_classes = len(string.digits) + len(string.ascii_uppercase)
+    # Total classes of uppercase letters (A-Z)
+    total_classes = len(string.ascii_uppercase)
     model = CustomMobileNetV2(total_classes)
 
     # Move the models to the appropriate device (CPU or GPU)

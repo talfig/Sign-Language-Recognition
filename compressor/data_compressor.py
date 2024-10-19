@@ -50,5 +50,4 @@ def decompress_npz(npz_file):
 
 
 if __name__ == "__main__":
-    compress_to_npz('../ASL-crop', '../data/compressed_asl_crop.npz',
-                    image_size=(400, 400))
+    compress_to_npz('../ASL-crop', '../data/compressed_asl_crop.npz')

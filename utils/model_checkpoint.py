@@ -25,7 +25,8 @@ def load_checkpoint(filepath, model, optimizer, device):
     return model, optimizer, epoch, loss
 
 
-def load_model(filepath, num_classes, device):
+def load_model(filepath, device):
+    num_classes = len(string.ascii_uppercase)
     model = CustomMobileNetV2(num_classes)
     state_dict = torch.load(filepath, weights_only=True)
     model.load_state_dict(state_dict)

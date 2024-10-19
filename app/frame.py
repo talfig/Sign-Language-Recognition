@@ -24,11 +24,9 @@ class HandDetectionApp:
         self.CONFIDENCE_THRESHOLD = 0.7  # Only consider predictions with confidence > 0.7
         self.predictions_queue = deque(maxlen=self.PREDICTION_WINDOW)
 
-        num_classes = len(string.digits) + len(string.ascii_uppercase)
-
         # Set up the model
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        self.model = load_model('../data/asl_crop_mobilenet_weights_epoch_10.pth', num_classes, self.device)
+        self.model = load_model('../data/asl_crop_mobilenet_weights_epoch_10.pth', self.device)
         self.model.eval()
 
         # Set up image transformations
