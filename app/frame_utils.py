@@ -46,8 +46,8 @@ def get_hand_bounding_box(hand_landmarks):
     return min_x, max_x, min_y, max_y
 
 
-# Function to draw a rectangle using normalized landmark coordinates
-def draw_bounding_box(frame, min_x, max_x, min_y, max_y):
+# Function to draw a bounding box and a filled box for the prediction text
+def draw_bounding_box(frame, min_x, max_x, min_y, max_y, prediction_sign=""):
     # Get the width and height of the frame (assuming frame.shape contains [height, width, channels])
     h, w, _ = frame.shape
 
@@ -55,22 +55,38 @@ def draw_bounding_box(frame, min_x, max_x, min_y, max_y):
     top_left = (int(min_x * w), int(min_y * h))  # Top-left corner
     bottom_right = (int(max_x * w), int(max_y * h))  # Bottom-right corner
 
-    # Draw the rectangle on the frame (color: blue, thickness: 2)
-    cv2.rectangle(frame, top_left, bottom_right, (255, 0, 0), 2)
+    # Adjust the top of the bounding box to leave space for text
+    padding = 20  # Padding above the bounding box for the filled text box (reduced padding)
+    text_box_height = 20  # Height of the filled text box (smaller height)
+    top_left_with_padding = (top_left[0], max(0, top_left[1] - padding))
+
+    # Draw the main bounding box (color: blue, thickness: 2)
+    cv2.rectangle(frame, top_left_with_padding, bottom_right, (255, 0, 0), 2)
+
+    # Draw the filled rectangle for the text (color: blue)
+    text_top_left = (top_left_with_padding[0], top_left_with_padding[1] - text_box_height)
+    text_bottom_right = (bottom_right[0], top_left_with_padding[1])
+    cv2.rectangle(frame, text_top_left, text_bottom_right, (255, 0, 0), cv2.FILLED)
+
+    # Calculate the position for centering the text inside the filled rectangle
+    font_scale = 0.75  # Smaller font scale
+    thickness = 1  # Thicker text to make it bolder
+    text_size = cv2.getTextSize(prediction_sign, cv2.FONT_HERSHEY_SIMPLEX, font_scale, thickness)[0]
+    text_x = text_top_left[0] + (text_bottom_right[0] - text_top_left[0] - text_size[0]) // 2
+    text_y = text_top_left[1] + (text_box_height + text_size[1]) // 2
+
+    # Display the prediction text inside the filled box (color: white)
+    if prediction_sign is not None:
+        cv2.putText(frame, prediction_sign, (text_x, text_y),
+                    cv2.FONT_HERSHEY_SIMPLEX, font_scale, (255, 255, 255), thickness)
 
 
-def detect_hand_landmarks(frame, hands):
-    # Process the frame to detect hands
-    results = hands.process(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
+def detect_hand_landmarks(frame, hand_landmarks, prediction_sign):
+    # Calculate the bounding rectangle based on hand landmarks
+    min_x, max_x, min_y, max_y = get_hand_bounding_box(hand_landmarks)
 
-    # If hand landmarks are detected, draw them on the mask
-    if results.multi_hand_landmarks:
-        for hand_landmarks in results.multi_hand_landmarks:
-            # Calculate the bounding rectangle based on hand landmarks
-            min_x, max_x, min_y, max_y = get_hand_bounding_box(hand_landmarks)
-
-            # Draw the bounding rectangle directly on the frame
-            draw_bounding_box(frame, min_x, max_x, min_y, max_y)
+    # Draw the bounding rectangle directly on the frame
+    draw_bounding_box(frame, min_x, max_x, min_y, max_y, prediction_sign)
 
 
 # Function to draw palm connections
@@ -121,51 +137,65 @@ def draw_hand_features(frame, hand_landmarks):
     draw_hand_landmarks(frame, hand_landmarks)
 
 
-def process_frame(frame, hands, model, transform, device):
-    """
-    Process a given frame to detect hand landmarks, draw bounding rectangles, and make predictions using the model.
+# Function to draw landmarks with red circles and connections with green lines
+def draw_hand_features_reg_green(frame, hand_landmarks):
+    # Set colors: red for landmarks, green for connections
+    red_color = (0, 0, 255)   # Red color for the circles (landmarks)
+    green_color = (0, 255, 0)  # Green color for the lines (connections)
 
-    Args:
-        frame: The frame to be processed.
-        hands: The Mediapipe hands detection object.
-        model: The trained PyTorch model for prediction.
-        transform: The torchvision transform to preprocess the frame.
-        device: The device (e.g., 'cuda' or 'cpu') for model inference.
+    # Draw hand landmarks and connections with specified colors
+    mp_drawing.draw_landmarks(
+        frame,
+        hand_landmarks,
+        mp_hands.HAND_CONNECTIONS,
+        mp_drawing.DrawingSpec(color=red_color, thickness=-1, circle_radius=4),  # Filled red circles
+        mp_drawing.DrawingSpec(color=green_color, thickness=2)  # Green lines (connections)
+    )
 
-    Returns:
-        final_prediction: The predicted sign for the frame.
-        output: The model's output for further comparison.
-    """
+
+def display_predictions(frame, hand_landmarks, confidence, predicted_sign, predictions_queue, confidence_threshold, prediction_window):
+    if predicted_sign is not None:
+        # Ensure the prediction has high confidence
+        if confidence.item() > confidence_threshold:
+            # Append the prediction to the queue
+            predictions_queue.append(predicted_sign)
+
+            # Get the smoothed prediction
+            smoothed_prediction = smooth_predictions(predictions_queue, prediction_window)
+
+            if smoothed_prediction is not None:
+                # Call the function to detect hand landmarks
+                detect_hand_landmarks(frame, hand_landmarks, smoothed_prediction)
+
+
+def process_frame(frame, hands, model, transform, device, multi_predictions_queue, confidence_threshold, prediction_window):
     # Process the frame to detect hands
     results = hands.process(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
 
-    # Create a black background frame
-    hand_features_frame = np.zeros_like(frame)
-
     if results.multi_hand_landmarks:
-        for hand_landmarks in results.multi_hand_landmarks:
+        for idx, hand_landmarks in enumerate(results.multi_hand_landmarks):
+            # Create a black background frame
+            hand_features_frame = np.zeros_like(frame)
+
             # Draw palm connections and landmarks
-            draw_hand_features(frame, hand_landmarks)
+            draw_hand_features_reg_green(frame, hand_landmarks)
 
             # Extract hand features from the frame based on detected landmarks
             draw_hand_features(hand_features_frame, hand_landmarks)
 
-        # Preprocess the frame with landmarks for model prediction
-        input_image = transform(hand_features_frame).unsqueeze(0).to(device)
+            # Preprocess the frame with landmarks for model prediction
+            input_image = transform(hand_features_frame).unsqueeze(0).to(device)
 
-        # Make predictions using the model
-        with torch.no_grad():
-            output = model(input_image)
-            confidence, predicted_class = torch.max(output, 1)  # Get the index of the highest prediction score
+            # Make predictions using the model
+            with torch.no_grad():
+                output = model(input_image)
+                confidence, predicted_class = torch.max(output, 1)  # Get the index of the highest prediction score
 
-        # Convert the predicted class index to a sign label (string)
-        predicted_sign = LabelMapper.index_to_label(predicted_class.item())
+                # Convert the predicted class index to a sign label (string)
+                predicted_sign = LabelMapper.index_to_label(predicted_class.item())
 
-        # Return the confidence and the predicted sign (string)
-        return confidence, predicted_sign
-
-    # If no input image is provided or frame couldn't be processed
-    return None, None
+                # Display the predicted sign
+                display_predictions(frame, hand_landmarks, confidence, predicted_sign, multi_predictions_queue[idx], confidence_threshold, prediction_window)
 
 
 def smooth_predictions(predictions_queue, prediction_window):

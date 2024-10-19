@@ -22,7 +22,7 @@ class HandDetectionApp:
         # Define constants
         self.PREDICTION_WINDOW = 5  # Number of frames to average over
         self.CONFIDENCE_THRESHOLD = 0.7  # Only consider predictions with confidence > 0.7
-        self.predictions_queue = deque(maxlen=self.PREDICTION_WINDOW)
+        self.multi_predictions_queue = [deque(maxlen=self.PREDICTION_WINDOW) for _ in range(2)]
 
         # Set up the model
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -76,11 +76,6 @@ class HandDetectionApp:
                                command=self.window.quit)
         self.btn_exit.grid(row=0, column=2, padx=10)
 
-        # Create a label to display the predicted sign
-        self.predicted_label = Label(self.window, text="Predicted Sign: ", font=("Arial", 20), bg="#333333",
-                                     fg="#FFFFFF")
-        self.predicted_label.pack(pady=10)
-
         self.running = False  # Control the flow of video feed
         self.imgtk = None  # Store the image to prevent garbage collection
 
@@ -104,27 +99,9 @@ class HandDetectionApp:
                 print("Error: Could not read frame.")
                 pass
 
-            # Call the function to detect hand landmarks
-            detect_hand_landmarks(frame, self.hands)
-
             # Process the frame
-            confidence, predicted_sign = process_frame(frame, self.hands, self.model, self.transform, self.device)
-
-            if predicted_sign is not None:
-                # Ensure the prediction has high confidence
-                if confidence.item() > self.CONFIDENCE_THRESHOLD:
-                    # Append the prediction to the queue
-                    self.predictions_queue.append(predicted_sign)
-
-                    # Get the smoothed prediction
-                    smoothed_prediction = smooth_predictions(self.predictions_queue, self.PREDICTION_WINDOW)
-
-                    if smoothed_prediction is not None:
-                        self.predicted_label.config(text=f"Predicted Sign: {smoothed_prediction}")
-
-            else:
-                # Display the predicted sign on the frame
-                self.predicted_label.config(text="No hands detected")
+            process_frame(frame, self.hands, self.model, self.transform, self.device,
+                          self.multi_predictions_queue, self.CONFIDENCE_THRESHOLD, self.PREDICTION_WINDOW)
 
             # Convert the frame to ImageTk format
             img = Image.fromarray(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
