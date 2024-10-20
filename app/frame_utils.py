@@ -130,15 +130,13 @@ def draw_hand_landmarks(frame, hand_landmarks):
             cv2.circle(frame, coords, 5, colors['blue'], -1)
 
 
-# Function to process the frame and draw hand landmarks
-def draw_hand_features(frame, hand_landmarks):
-    # Draw palm connections and landmarks on the frame
-    draw_palm_connections(frame, hand_landmarks)
-    draw_hand_landmarks(frame, hand_landmarks)
+def extract_hand_features_mask(black_background, hand_landmarks):
+    draw_palm_connections(black_background, hand_landmarks)
+    draw_hand_landmarks(black_background, hand_landmarks)
 
 
 # Function to draw landmarks with red circles and connections with green lines
-def draw_hand_features_reg_green(frame, hand_landmarks):
+def draw_hand_features(frame, hand_landmarks):
     # Set colors: red for landmarks, green for connections
     red_color = (0, 0, 255)   # Red color for the circles (landmarks)
     green_color = (0, 255, 0)  # Green color for the lines (connections)
@@ -178,10 +176,10 @@ def process_frame(frame, hands, model, transform, device, multi_predictions_queu
             hand_features_frame = np.zeros_like(frame)
 
             # Draw palm connections and landmarks
-            draw_hand_features_reg_green(frame, hand_landmarks)
+            draw_hand_features(frame, hand_landmarks)
 
             # Extract hand features from the frame based on detected landmarks
-            draw_hand_features(hand_features_frame, hand_landmarks)
+            extract_hand_features_mask(hand_features_frame, hand_landmarks)
 
             # Preprocess the frame with landmarks for model prediction
             input_image = transform(hand_features_frame).unsqueeze(0).to(device)
