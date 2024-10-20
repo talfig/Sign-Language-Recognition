@@ -26,7 +26,7 @@ def train_evaluate(npz_file):
 
     # Set up hyperparameters
     num_classes = len(np.unique(labels))
-    num_epochs = 10
+    num_epochs = 20
     batch_size = 100
     learning_rate = 0.001
 

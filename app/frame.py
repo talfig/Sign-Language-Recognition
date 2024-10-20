@@ -26,7 +26,7 @@ class HandDetectionApp:
 
         # Set up the model
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        self.model = load_model('../data/asl_crop_mobilenet_weights_epoch_10.pth', self.device)
+        self.model = load_model('../data/asl_crop_mobilenet_weights_epoch_20.pth', self.device)
         self.model.eval()
 
         # Set up image transformations
