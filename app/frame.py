@@ -20,8 +20,8 @@ class HandDetectionApp:
         self.hands = mp.solutions.hands.Hands(min_detection_confidence=0.7, min_tracking_confidence=0.7)
 
         # Define constants
-        self.PREDICTION_WINDOW = 5  # Number of frames to average over
-        self.CONFIDENCE_THRESHOLD = 0.7  # Only consider predictions with confidence > 0.7
+        self.PREDICTION_WINDOW = 7  # Number of frames to average over
+        self.CONFIDENCE_THRESHOLD = 0.8  # Only consider predictions with confidence > 0.8
         self.multi_predictions_queue = [deque(maxlen=self.PREDICTION_WINDOW) for _ in range(2)]
 
         # Set up the model

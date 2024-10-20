@@ -173,21 +173,27 @@ def process_frame(frame, hands, model, transform, device, multi_predictions_queu
     if results.multi_hand_landmarks:
         for idx, hand_landmarks in enumerate(results.multi_hand_landmarks):
             # Create a black background frame
-            hand_features_frame = np.zeros_like(frame)
+            orig_features_mask = np.zeros_like(frame)
 
             # Draw palm connections and landmarks
             draw_hand_features(frame, hand_landmarks)
 
             # Extract hand features from the frame based on detected landmarks
-            extract_hand_features_mask(hand_features_frame, hand_landmarks)
+            extract_hand_features_mask(orig_features_mask, hand_landmarks)
+            mirror_features_mask = cv2.flip(orig_features_mask, 1)
 
             # Preprocess the frame with landmarks for model prediction
-            input_image = transform(hand_features_frame).unsqueeze(0).to(device)
+            orig_input_image = transform(orig_features_mask).unsqueeze(0).to(device)
+            mirror_input_image = transform(mirror_features_mask).unsqueeze(0).to(device)
 
             # Make predictions using the model
             with torch.no_grad():
-                output = model(input_image)
-                confidence, predicted_class = torch.max(output, 1)  # Get the index of the highest prediction score
+                orig_output = model(orig_input_image)
+                mirror_output = model(mirror_input_image)
+
+                # Get the maximum prediction score between original and mirrored output
+                final_output = torch.max(orig_output, mirror_output)
+                confidence, predicted_class = torch.max(final_output, 1)
 
                 # Convert the predicted class index to a sign label (string)
                 predicted_sign = LabelMapper.index_to_label(predicted_class.item())
