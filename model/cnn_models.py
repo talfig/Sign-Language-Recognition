@@ -6,7 +6,7 @@ import torch.nn as nn
 from torchsummary import summary
 from torchvision.models import (
     mobilenet_v2, MobileNet_V2_Weights,
-    resnet50, ResNet50_Weights
+    resnet18, ResNet18_Weights
 )
 
 
@@ -29,11 +29,11 @@ class CustomMobileNetV2(nn.Module):
         return self.base_model(x)
 
 
-class CustomResNet50(nn.Module):
+class CustomResNet18(nn.Module):
     def __init__(self, num_classes):
-        super(CustomResNet50, self).__init__()
+        super(CustomResNet18, self).__init__()
         # Load the pre-trained ResNet50 model
-        self.base_model = resnet50(weights=ResNet50_Weights.DEFAULT)
+        self.base_model = resnet18(weights=ResNet18_Weights.DEFAULT)
 
         # Modify the fully connected layer (classifier part) of ResNet50
         self.base_model.fc = nn.Sequential(
