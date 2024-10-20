@@ -11,12 +11,12 @@ mp_drawing_styles = mp.solutions.drawing_styles
 
 # Define the color mapping for different landmarks in BGR format
 colors = {
-    'red': (0, 0, 255),         # Red in BGR format for landmarks 0, 1, 5, 9, 13, 17
-    'orange': (215, 242, 255),  # Light orange in BGR format for landmarks 2, 3, 4
-    'purple': (128, 0, 128),    # Purple for landmarks 6, 7, 8
-    'yellow': (14, 208, 255),   # Yellow for landmarks 10, 11, 12
-    'green': (0, 255, 0),       # Green for landmarks 14, 15, 16
-    'blue': (255, 0, 0),        # Blue in BGR format for landmarks 18, 19, 20
+    'red': (45, 46, 255),       # Red in BGR format for landmarks 0, 1, 5, 9, 13, 17
+    'orange': (184, 231, 255),  # Light orange in BGR format for landmarks 2, 3, 4
+    'purple': (130, 61, 134),   # Purple for landmarks 6, 7, 8
+    'yellow': (6, 206, 255),    # Yellow for landmarks 10, 11, 12
+    'green': (46, 255, 49),     # Green for landmarks 14, 15, 16
+    'blue': (190, 103, 23),     # Blue in BGR format for landmarks 18, 19, 20
     'palm': (128, 128, 128)     # Gray for palm connections
 }
 
@@ -76,7 +76,7 @@ def draw_bounding_box(frame, min_x, max_x, min_y, max_y, prediction_sign=""):
     text_y = text_top_left[1] + (text_box_height + text_size[1]) // 2
 
     # Display the prediction text inside the filled box (color: white)
-    if prediction_sign is not None:
+    if prediction_sign:
         cv2.putText(frame, prediction_sign, (text_x, text_y),
                     cv2.FONT_HERSHEY_SIMPLEX, font_scale, (255, 255, 255), thickness)
 
@@ -152,7 +152,7 @@ def draw_hand_features(frame, hand_landmarks):
 
 
 def display_predictions(frame, hand_landmarks, confidence, predicted_sign, predictions_queue, confidence_threshold, prediction_window):
-    if predicted_sign is not None:
+    if predicted_sign:
         # Ensure the prediction has high confidence
         if confidence.item() > confidence_threshold:
             # Append the prediction to the queue
@@ -161,7 +161,7 @@ def display_predictions(frame, hand_landmarks, confidence, predicted_sign, predi
             # Get the smoothed prediction
             smoothed_prediction = smooth_predictions(predictions_queue, prediction_window)
 
-            if smoothed_prediction is not None:
+            if smoothed_prediction:
                 # Call the function to detect hand landmarks
                 detect_hand_landmarks(frame, hand_landmarks, smoothed_prediction)
 
