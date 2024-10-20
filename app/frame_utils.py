@@ -69,8 +69,8 @@ def draw_bounding_box(frame, min_x, max_x, min_y, max_y, prediction_sign=""):
     cv2.rectangle(frame, text_top_left, text_bottom_right, (255, 0, 0), cv2.FILLED)
 
     # Calculate the position for centering the text inside the filled rectangle
-    font_scale = 0.75  # Smaller font scale
-    thickness = 1  # Thicker text to make it bolder
+    font_scale = 0.75
+    thickness = 1
     text_size = cv2.getTextSize(prediction_sign, cv2.FONT_HERSHEY_SIMPLEX, font_scale, thickness)[0]
     text_x = text_top_left[0] + (text_bottom_right[0] - text_top_left[0] - text_size[0]) // 2
     text_y = text_top_left[1] + (text_box_height + text_size[1]) // 2
