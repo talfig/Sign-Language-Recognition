@@ -4,6 +4,8 @@ from model import *
 
 
 def train_model(model, dataloader, num_epochs, loss_fn, optimizer, device):
+    print("Training Started.")
+
     # Training loop
     for epoch in range(num_epochs):
         # Clear any cached GPU memory
@@ -34,7 +36,7 @@ def train_model(model, dataloader, num_epochs, loss_fn, optimizer, device):
 
         # Save the model weights every few epochs (e.g., every 5 epochs)
         if (epoch + 1) % 5 == 0:
-            torch.save(model.state_dict(), f'../data/asl_crop_resnet50_weights_epoch_{epoch + 1}.pth')
+            torch.save(model.state_dict(), f'../data/asl_crop_mobilenet_weights_epoch_{epoch + 1}.pth')
             print(f"Model weights saved for epoch {epoch + 1}.")
 
     print("Training finished.")

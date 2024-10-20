@@ -50,11 +50,11 @@ class CustomResNet50(nn.Module):
 if __name__ == "__main__":
     # Total classes of uppercase letters (A-Z)
     total_classes = len(string.ascii_uppercase)
-    model = CustomResNet50(total_classes)
+    model = CustomMobileNetV2(total_classes)
 
     # Move the models to the appropriate device (CPU or GPU)
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     model.to(device)
 
-    print("ResNet50 Summary:")
+    print("MobileNetV2 Summary:")
     summary(model, (3, 224, 224))
