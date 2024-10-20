@@ -26,7 +26,7 @@ def train_evaluate(npz_file):
 
     # Set up hyperparameters
     num_classes = len(np.unique(labels))
-    num_epochs = 20
+    num_epochs = 10
     batch_size = 100
     learning_rate = 0.001
 
@@ -37,7 +37,7 @@ def train_evaluate(npz_file):
     test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
 
     # Initialize the model
-    model = CustomMobileNetV2(num_classes=num_classes)
+    model = CustomResNet50(num_classes=num_classes)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model.to(device)
 

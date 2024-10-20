@@ -6,7 +6,7 @@ import torch.nn as nn
 from torchsummary import summary
 from torchvision.models import (
     mobilenet_v2, MobileNet_V2_Weights,
-    resnet34, ResNet34_Weights
+    resnet50, ResNet50_Weights
 )
 
 
@@ -29,11 +29,11 @@ class CustomMobileNetV2(nn.Module):
         return self.base_model(x)
 
 
-class CustomResnet34(nn.Module):
+class CustomResNet50(nn.Module):
     def __init__(self, num_classes):
-        super(CustomResnet34, self).__init__()
+        super(CustomResNet50, self).__init__()
         # Load the pre-trained ResNet50 model
-        self.base_model = resnet34(weights=ResNet34_Weights.DEFAULT)
+        self.base_model = resnet50(weights=ResNet50_Weights.DEFAULT)
 
         # Modify the fully connected layer (classifier part) of ResNet50
         self.base_model.fc = nn.Sequential(
@@ -50,11 +50,11 @@ class CustomResnet34(nn.Module):
 if __name__ == "__main__":
     # Total classes of uppercase letters (A-Z)
     total_classes = len(string.ascii_uppercase)
-    model = CustomMobileNetV2(total_classes)
+    model = CustomResNet50(total_classes)
 
     # Move the models to the appropriate device (CPU or GPU)
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     model.to(device)
 
-    print("ResNet18 Summary:")
+    print("ResNet50 Summary:")
     summary(model, (3, 224, 224))
