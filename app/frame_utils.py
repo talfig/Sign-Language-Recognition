@@ -81,7 +81,7 @@ def draw_bounding_box(frame, min_x, max_x, min_y, max_y, prediction_sign=""):
                     cv2.FONT_HERSHEY_SIMPLEX, font_scale, (255, 255, 255), thickness)
 
 
-def detect_hand_landmarks(frame, hand_landmarks, prediction_sign):
+def detect_hand_bounds(frame, hand_landmarks, prediction_sign):
     # Calculate the bounding rectangle based on hand landmarks
     min_x, max_x, min_y, max_y = get_hand_bounding_box(hand_landmarks)
 
@@ -163,7 +163,7 @@ def display_predictions(frame, hand_landmarks, confidence, predicted_sign, predi
 
             if smoothed_prediction:
                 # Call the function to detect hand landmarks
-                detect_hand_landmarks(frame, hand_landmarks, smoothed_prediction)
+                detect_hand_bounds(frame, hand_landmarks, smoothed_prediction)
 
 
 def process_frame(frame, hands, model, transform, device, multi_predictions_queue, confidence_threshold, prediction_window):
