@@ -3,11 +3,11 @@
 from test import *
 
 # Load the .npz dataset
-X, y = decompress_npz('../data/backup/compressed_asl_crop.npz')
+X, y = decompress_npz('../data/compressed_asl_crop_v2.npz')
 
 # Load the model
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-model = load_model('../data/asl_crop_mobilenet_weights_epoch_10.pth', device)
+model = load_model('../data/asl_crop_v2_mobilenet_weights_epoch_10.pth', device)
 
 transform = transforms.Compose([
     transforms.ToPILImage(),

@@ -7,8 +7,8 @@ import random
 
 # Augmentation functions
 def augment_image(image):
-    # Apply random augmentation techniques (e.g., flipping, rotation, resize)
-    aug_type = random.choice(['flip', 'rotate', 'resize'])
+    # Apply random augmentation techniques (e.g., flipping, rotation, noise, resize)
+    aug_type = random.choice(['flip', 'rotate', 'noise', 'resize'])
 
     if aug_type == 'flip':
         return cv2.flip(image, 1)  # Horizontal flip
@@ -17,6 +17,9 @@ def augment_image(image):
         center = (image.shape[1] // 2, image.shape[0] // 2)
         matrix = cv2.getRotationMatrix2D(center, angle, 1.0)
         return cv2.warpAffine(image, matrix, (image.shape[1], image.shape[0]))
+    elif aug_type == 'noise':
+        noise = np.random.randint(0, 50, image.shape, dtype='uint8')
+        return cv2.add(image, noise)
     elif aug_type == 'resize':
         # Resize the entire image (smaller or larger) but keep the original dimensions
         h, w, _ = image.shape

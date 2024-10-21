@@ -75,4 +75,4 @@ def decompress_npz(npz_file):
 
 
 if __name__ == "__main__":
-    balance_compress_npz('../ASL-crop', '../data/compressed_asl_crop.npz')
+    balance_compress_npz('../ASL-crop', '../data/compressed_asl_crop_v2.npz')
