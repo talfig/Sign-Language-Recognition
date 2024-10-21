@@ -20,7 +20,7 @@ def get_class_counts(dataset_dir):
 
 
 # Resize, augment, and save images in compressed .npz format
-def balance_compress_npz(dataset_dir, output_file, image_size=(224, 224)):
+def balance_compress_npz(dataset_dir, output_file, image_size=(224, 224), base_aug=500):
     images = []
     labels = []
 
@@ -40,7 +40,7 @@ def balance_compress_npz(dataset_dir, output_file, image_size=(224, 224)):
                     label_images.append(image_resized)
 
             # Augment images for underrepresented classes
-            num_images_needed = max_count - len(label_images)
+            num_images_needed = max_count - len(label_images) + augmentation_constant
             if num_images_needed > 0:
                 augmented_images = []
                 for i in range(num_images_needed):
