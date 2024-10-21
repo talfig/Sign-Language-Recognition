@@ -40,7 +40,7 @@ def balance_compress_npz(dataset_dir, output_file, image_size=(224, 224), base_a
                     label_images.append(image_resized)
 
             # Augment images for underrepresented classes
-            num_images_needed = max_count - len(label_images) + augmentation_constant
+            num_images_needed = max_count - len(label_images) + base_aug
             if num_images_needed > 0:
                 augmented_images = []
                 for i in range(num_images_needed):
