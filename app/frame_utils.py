@@ -76,7 +76,7 @@ def draw_bounding_box(frame, min_x, max_x, min_y, max_y, prediction_sign=""):
     text_y = text_top_left[1] + (text_box_height + text_size[1]) // 2
 
     # Display the prediction text inside the filled box (color: white)
-    if prediction_sign:
+    if prediction_sign is not None:
         cv2.putText(frame, prediction_sign, (text_x, text_y),
                     cv2.FONT_HERSHEY_SIMPLEX, font_scale, (255, 255, 255), thickness)
 
@@ -152,7 +152,7 @@ def draw_hand_features(frame, hand_landmarks):
 
 
 def display_predictions(frame, hand_landmarks, confidence, predicted_sign, predictions_queue, confidence_threshold, prediction_window):
-    if predicted_sign:
+    if predicted_sign is not None:
         # Ensure the prediction has high confidence
         if confidence.item() > confidence_threshold:
             # Append the prediction to the queue
@@ -161,7 +161,7 @@ def display_predictions(frame, hand_landmarks, confidence, predicted_sign, predi
             # Get the smoothed prediction
             smoothed_prediction = smooth_predictions(predictions_queue, prediction_window)
 
-            if smoothed_prediction:
+            if smoothed_prediction is not None:
                 # Call the function to detect hand landmarks
                 detect_hand_bounds(frame, hand_landmarks, smoothed_prediction)
 
