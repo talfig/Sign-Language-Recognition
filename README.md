@@ -48,11 +48,17 @@ The core objective of this project is to provide accurate and fast classificatio
    git clone https://github.com/talfig/sign-language-recognition.git
    cd sign-language-recognition
    ```
-2. **Install dependencies**: Ensure Python 3.x is installed. Then, install the required libraries by running:
+2. **Install dependencies**:
+
+   Ensure Python 3.x is installed. Then, install the required libraries by running:
+   
    ```bash
    pip install -r requirements.txt
    ```
-3. **Run the Application**: To launch the app and start the webcam-based hand sign detection:
+5. **Run the Application**:
+
+   To launch the app and start the webcam-based hand sign detection:
+   
    ```bash
    python app/frame.py
    ```
