@@ -198,8 +198,14 @@ def process_frame(frame, hands, model, transform, device, multi_predictions_queu
                 # Convert the predicted class index to a sign label (string)
                 predicted_sign = LabelMapper.index_to_label(predicted_class.item())
 
-                # Display the predicted sign
-                display_predictions(frame, hand_landmarks, confidence, predicted_sign, multi_predictions_queue[idx], confidence_threshold, prediction_window)
+                # Check if idx is within bounds of multi_predictions_queue
+                if idx < len(multi_predictions_queue):
+                    # Display the predicted sign
+                    display_predictions(frame, hand_landmarks, confidence, predicted_sign, multi_predictions_queue[idx],
+                                        confidence_threshold, prediction_window)
+                else:
+                    # Handle the case when idx is out of bounds
+                    print(f"Warning: idx {idx} is out of bounds for multi_predictions_queue.")
 
 
 def smooth_predictions(predictions_queue, prediction_window):
