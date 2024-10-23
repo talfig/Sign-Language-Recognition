@@ -41,6 +41,22 @@ The core objective of this project is to provide accurate and fast classificatio
    - The classification model is based on the **MobileNet** architecture, which has been fine-tuned for the task of hand sign recognition. MobileNet is a lightweight model designed for mobile and embedded vision tasks, making it an efficient choice for real-time applications.
    - The classifier takes hand landmarks as input and predicts the hand sign from a predefined set of classes. The model used in this project was trained for 10 epochs, and its weights are stored in the file `asl_crop_v2_mobilenet_weights_epoch_10.pth`.
 
+## Installation and Setup
+
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/talfig/sign-language-recognition.git
+   cd sign-language-recognition
+   ```
+2. **Install dependencies**: Ensure Python 3.x is installed. Then, install the required libraries by running:
+   ```bash
+   pip install -r requirements.txt
+   ```
+3. **Run the Application**: To launch the app and start the webcam-based hand sign detection:
+   ```bash
+   python app/frame.py
+   ```
+
 ## CUDA and cuDNN Installation Guide for Project (Windows & Ubuntu)
 
 ### 1. Downloading and Installing CUDA
