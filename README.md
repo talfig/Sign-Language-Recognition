@@ -1,9 +1,39 @@
 <h1 align="center"> Sign-Language-Recognition </h1>
 
 <p align="center">
-    <a href="https://github.com/talfig/Assembler">
+    <a href="https://github.com/talfig/Sign-Language-Recognition">
       <img src="https://github.com/talfig/Sign-Language-Recognition/blob/main/hand_landmarks.png">
     </a>
+</p>
+
+<p align="center">
+  <!-- GitHub Stars -->
+  <a href="https://github.com/talfig/Sign-Language-Recognition">
+    <img src="https://img.shields.io/github/stars/talfig/Sign-Language-Recognition?color=ff69b4&label=Stars&logo=github&style=flat-square" alt="GitHub stars">
+  </a>
+  <!-- GitHub Forks -->
+  <a href="https://github.com/talfig/Sign-Language-Recognition/fork">
+    <img src="https://img.shields.io/github/forks/talfig/Sign-Language-Recognition?color=ffd700&label=Forks&logo=github&style=flat-square" alt="GitHub forks">
+  </a>
+  <!-- Repo Views -->
+  <a href="https://github.com/talfig/Sign-Language-Recognition">
+    <img src="https://komarev.com/ghpvc/?username=talfig-Sign-Language-Recognition&label=Repo%20views&color=ff6347&style=flat-square" alt="Repo views">
+  </a>
+  <!-- License -->
+  <a href="https://github.com/talfig/Sign-Language-Recognition/blob/main/LICENSE">
+    <img src="https://img.shields.io/badge/license-AGPL-blue.svg" alt="License">
+  </a>
+</p>
+
+<p align="center">
+  <!-- Contributions Welcome -->
+  <a href="https://github.com/talfig/Sign-Language-Recognition">
+    <img src="https://img.shields.io/badge/Contributions-Welcome-00c4cc?style=flat-square" alt="Contributions Welcome">
+  </a>
+  <!-- Made with Love -->
+  <a href="https://github.com/talfig/Sign-Language-Recognition">
+    <img src="https://img.shields.io/badge/Made%20with%20♥-00c4cc?style=flat-square" alt="Made with Love">
+  </a>
 </p>
 
 ## Project Overview
