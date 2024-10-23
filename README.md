@@ -1,134 +1,188 @@
 <h1 align="center"> Sign-Language-Recognition </h1>
 
 <p align="center">
-    <a href="https://github.com/talfig/Assembler">
+    <a href="https://github.com/talfig/Sign-Language-Recognition">
       <img src="https://github.com/talfig/Sign-Language-Recognition/blob/main/hand_landmarks.png">
     </a>
 </p>
 
-## CUDA and cuDNN Installation Guide for Project
+<p align="center">
+  <!-- GitHub Stars -->
+  <a href="https://github.com/talfig/Sign-Language-Recognition">
+    <img src="https://img.shields.io/github/stars/talfig/Sign-Language-Recognition?color=ff69b4&label=Stars&logo=github&style=flat-square" alt="GitHub stars">
+  </a>
+  <!-- GitHub Forks -->
+  <a href="https://github.com/talfig/Sign-Language-Recognition/fork">
+    <img src="https://img.shields.io/github/forks/talfig/Sign-Language-Recognition?color=ffd700&label=Forks&logo=github&style=flat-square" alt="GitHub forks">
+  </a>
+  <!-- Repo Views -->
+  <a href="https://github.com/talfig/Sign-Language-Recognition">
+    <img src="https://komarev.com/ghpvc/?username=talfig-Sign-Language-Recognition&label=Repo%20views&color=ff6347&style=flat-square" alt="Repo views">
+  </a>
+  <!-- License -->
+  <a href="https://github.com/talfig/Sign-Language-Recognition/blob/main/LICENSE">
+    <img src="https://img.shields.io/badge/license-AGPL-blue.svg" alt="License">
+  </a>
+</p>
+
+<p align="center">
+  <!-- Contributions Welcome -->
+  <a href="https://github.com/talfig/Sign-Language-Recognition">
+    <img src="https://img.shields.io/badge/Contributions-Welcome-00c4cc?style=flat-square" alt="Contributions Welcome">
+  </a>
+  <!-- Made with Love -->
+  <a href="https://github.com/talfig/Sign-Language-Recognition">
+    <img src="https://img.shields.io/badge/Made%20with%20♥-00c4cc?style=flat-square" alt="Made with Love">
+  </a>
+</p>
+
+## Project Overview
+
+The core objective of this project is to provide accurate and fast classification of hand signs based on real-time input. It is implemented using several well-known libraries:
+
+1. **MediaPipe Hands Model**: This model detects and tracks hand landmarks in real-time, offering high accuracy in hand position recognition. It provides 21 key points (landmarks) for each hand and tracks multiple hands in a video frame, which are used for further sign classification.
+   
+2. **PyTorch Classification Model**: Initially, a **ResNet18** model was tested but resulted in lower accuracy. Consequently, a pre-trained **MobileNet** architecture was adopted, which provides superior accuracy in classifying hand signs. The model has been trained using a dataset of hand sign images, with its weights stored in the file `asl_crop_v2_mobilenet_weights_epoch_10.pth`. This model outputs probabilities for different hand sign classes, and a confidence threshold is applied to ensure accurate predictions.
+
+## Main Features
+
+1. **Hand Tracking and Detection**: The **MediaPipe Hands** model is responsible for detecting the user's hand in the video feed and extracting key hand landmarks. These landmarks are essential for determining hand orientation and positioning, which feeds into the classification process.
+   
+2. **Sign Classification**: Once the hand is detected and the landmarks are identified, the processed landmarks are passed into the PyTorch classification model. The classifier predicts the hand sign based on the detected landmarks. The model has been trained on a variety of hand gestures to recognize different signs accurately.
+
+3. **Real-time Video Processing**: The application continuously processes webcam frames, applying the hand tracking model, running sign classification, and displaying the results in a GUI. A **confidence threshold** of 0.7 is applied, meaning that only predictions with high certainty are shown to the user. Additionally, predictions are averaged over the last 5 frames to smooth out any jitter or instability in the real-time predictions.
+
+4. **Custom Hand Landmarks Display**: The hand landmarks are visually represented in the output video stream. Each part of the hand (fingers, palm, etc.) is color-coded for better clarity. This visualization helps the user see the points being tracked and how they correspond to the predicted hand sign.
+
+## Application Flow
+
+1. **Webcam Input**: The app captures live video input from the webcam.
+2. **Hand Detection**: The **MediaPipe** model processes each frame, detects the hands, and extracts landmarks.
+3. **Hand Sign Classification**: The detected landmarks are passed to the PyTorch model, which predicts the hand sign.
+4. **Display**: The video feed is displayed through a graphical interface, with hand landmarks and classification results overlaid.
+
+## Models Used
+
+### 1. **MediaPipe Hands**:
+   - MediaPipe Hands provides robust hand detection and tracking capabilities by identifying 21 landmarks on each hand. It works well under different lighting conditions and can detect multiple hands in a single frame.
+   - This model ensures that only the precise hand region is analyzed, which is essential for the classification step.
+
+### 2. **PyTorch Hand Sign Classifier**:
+   - The classification model is based on the **MobileNet** architecture, which has been fine-tuned for the task of hand sign recognition. MobileNet is a lightweight model designed for mobile and embedded vision tasks, making it an efficient choice for real-time applications.
+   - The classifier takes hand landmarks as input and predicts the hand sign from a predefined set of classes. The model used in this project was trained for 10 epochs, and its weights are stored in the file `asl_crop_v2_mobilenet_weights_epoch_10.pth`.
+
+## Installation and Setup
+
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/talfig/sign-language-recognition.git
+   cd sign-language-recognition
+   ```
+2. **Install dependencies**:
+
+   Ensure Python 3.x is installed. Then, install the required libraries by running:
+   
+   ```bash
+   pip install -r requirements.txt
+   ```
+5. **Run the Application**:
+
+   To launch the app and start the webcam-based hand sign detection:
+   
+   ```bash
+   python app/frame.py
+   ```
+
+## CUDA and cuDNN Installation Guide for Project (Windows & Ubuntu)
 
 ### 1. Downloading and Installing CUDA
 
-To install CUDA, follow these steps:
-
+#### For Windows:
 1. Visit the official NVIDIA CUDA Toolkit website: [CUDA Toolkit](https://developer.nvidia.com/cuda-toolkit).
-2. Select your operating system and download the appropriate version (we recommend using CUDA 11.2 for compatibility with TensorFlow and PyTorch).
-3. Follow the installation instructions for your system, or use the commands below for Ubuntu:
+2. Select **Windows** as your operating system and download the appropriate version (CUDA 11.2 is suggested for compatibility with TensorFlow and PyTorch).
+3. Run the downloaded installer and follow the installation instructions. Choose **Express Install** or **Custom Install** depending on your preference.
+4. After installation, verify the CUDA installation by running the following command in **Command Prompt**:
 
-```bash
-sudo apt-key adv --fetch-keys http://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/7fa2af80.pub
-sudo sh -c 'echo "deb http://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64 /" > /etc/apt/sources.list.d/cuda.list'
-sudo apt-get update
-sudo apt-get -y install cuda
-```
+    ```bash
+    nvcc --version
+    ```
+
+#### For Ubuntu:
+1. Visit the official NVIDIA CUDA Toolkit website: [CUDA Toolkit](https://developer.nvidia.com/cuda-toolkit).
+2. Select **Linux** as your operating system and download the appropriate version.
+3. Follow these commands to install CUDA:
+
+    ```bash
+    sudo apt-key adv --fetch-keys http://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/7fa2af80.pub
+    sudo sh -c 'echo "deb http://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64 /" > /etc/apt/sources.list.d/cuda.list'
+    sudo apt-get update
+    sudo apt-get -y install cuda
+    ```
+
+4. Verify the installation with:
+
+    ```bash
+    nvcc --version
+    ```
+
+---
 
 ### 2. Downloading and Installing cuDNN
 
+#### For Windows:
 1. Visit the NVIDIA cuDNN library page: [cuDNN Download](https://developer.nvidia.com/cudnn).
 2. Download the cuDNN version compatible with your CUDA installation.
-3. Follow the installation steps based on your system. For Linux, use:
+3. Unzip the cuDNN package and copy the files into the appropriate CUDA directories (usually located in `C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.2`):
+   - Copy the contents of the `bin` folder to `C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.2\bin`.
+   - Copy the contents of the `include` folder to `C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.2\include`.
+   - Copy the contents of the `lib` folder to `C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.2\lib\x64`.
 
-```bash
-tar -xzvf cudnn-linux-x86_64-8.x.x.x_cuda11.2-archive.tar.xz
-sudo cp cuda/include/cudnn*.h /usr/local/cuda/include
-sudo cp cuda/lib64/libcudnn* /usr/local/cuda/lib64
-sudo chmod a+r /usr/local/cuda/include/cudnn*.h /usr/local/cuda/lib64/libcudnn*
-```
+#### For Ubuntu:
+1. Visit the NVIDIA cuDNN library page: [cuDNN Download](https://developer.nvidia.com/cudnn).
+2. Download the cuDNN version compatible with your CUDA installation.
+3. Install cuDNN by running:
+
+    ```bash
+    tar -xzvf cudnn-linux-x86_64-8.x.x.x_cuda11.2-archive.tar.xz
+    sudo cp cuda/include/cudnn*.h /usr/local/cuda/include
+    sudo cp cuda/lib64/libcudnn* /usr/local/cuda/lib64
+    sudo chmod a+r /usr/local/cuda/include/cudnn*.h /usr/local/cuda/lib64/libcudnn*
+    ```
+
+---
 
 ### 3. Adding CUDA and cuDNN to Environment Variables
 
-To make CUDA and cuDNN available globally, add them to your environment variables:
+#### For Windows:
+1. Open **Control Panel** > **System and Security** > **System**.
+2. Click **Advanced system settings** on the left, then click **Environment Variables**.
+3. Under **System variables**, find `Path`, select it, and click **Edit**.
+4. Add the following to the list of paths (adjust the CUDA version if needed):
+    - `C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.2\bin`
+    - `C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.2\libnvvp`
+5. Click **OK** to save the changes.
 
-Open your .bashrc or .zshrc file (depending on your shell):
+#### For Ubuntu:
+1. Open your `.bashrc` or `.zshrc` file (depending on your shell):
 
-```bash
-nano ~/.bashrc
-```
+    ```bash
+    nano ~/.bashrc
+    ```
 
-Add the following lines at the end of the file:
+2. Add the following lines at the end of the file:
 
-```bash
-export PATH=/usr/local/cuda-11.2/bin${PATH:+:${PATH}}
-export LD_LIBRARY_PATH=/usr/local/cuda-11.2/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
-```
+    ```bash
+    export PATH=/usr/local/cuda-11.2/bin${PATH:+:${PATH}}
+    export LD_LIBRARY_PATH=/usr/local/cuda-11.2/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
+    ```
 
-Save the file and run:
+3. Save the file and run:
 
-```bash
-source ~/.bashrc
-```
+    ```bash
+    source ~/.bashrc
+    ```
 
-## What To Do When TensorFlow is Not Detecting Your GPU
-
-If TensorFlow is not detecting your GPU, it can slow down deep learning processes. Below are some common reasons and solutions to fix the issue.
-
-### Why is TensorFlow not Detecting Your GPU?
-
-1. **Missing Dependencies:** TensorFlow needs specific dependencies to run on a GPU, like the CUDA toolkit and cuDNN library.
-2. **Outdated/Incompatible Drivers:** Your GPU drivers might be outdated or incompatible with TensorFlow.
-3. **Incorrect Installation:** TensorFlow might not be installed with GPU support.
-4. **Missing Environment Variables:** TensorFlow may not locate CUDA due to missing environment variables.
-5. **Hardware Limitations:** Older GPUs might not meet the minimum requirements.
-
-### How to Fix TensorFlow Not Detecting Your GPU
-
-#### 1. Install Required Dependencies
-
-Make sure you have the latest NVIDIA GPU drivers, CUDA Toolkit, and cuDNN library:
-
-* **NVIDIA Drivers:** Download from NVIDIA Drivers.
-* **CUDA Toolkit:** Download from CUDA Toolkit.
-* **cuDNN Library:** Download from cuDNN.
-
-#### 2. Update GPU Drivers
-
-* **NVIDIA:** Download from NVIDIA Drivers.
-* **AMD:** Download from AMD Drivers.
-* **Intel:** Download from Intel Drivers.
-
-#### 3. Reinstall TensorFlow with GPU Support
-
-**Using pip:**
-
-```bash
-pip uninstall tensorflow
-pip install tensorflow-gpu
-```
-
-**Using Anaconda:**
-
-```bash
-conda uninstall tensorflow
-conda install tensorflow-gpu
-```
-
-#### 4. Set Environment Variables
-
-For `Windows`:
-
-```bash
-setx PATH "%PATH%;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.0\extras\CUPTI\lib64"
-setx PATH "%PATH%;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.0\bin"
-```
-
-For `Linux`:
-
-```bash
-export LD_LIBRARY_PATH=/usr/local/cuda-11.0/extras/CUPTI/lib64:$LD_LIBRARY_PATH
-export LD_LIBRARY_PATH=/usr/local/cuda-11.0/lib64:$LD_LIBRARY_PATH
-```
-
-#### 5. Check Your Hardware
-
-Ensure your GPU meets the minimum requirements for TensorFlow:
-
-* NVIDIA® GPU with CUDA®** Compute Capability 3.5 or higher
-* CUDA® Toolkit 11.0 or higher
-* cuDNN 8.0 or higher
-* 8 GB of RAM or more
-
-## Help for PyTorch: Fixing CUDA Error
+# Troubleshooting PyTorch Not Detecting GPU
 
 If you're encountering an error indicating that your PyTorch installation does not support CUDA, follow these steps to resolve the issue:
 
@@ -148,10 +202,10 @@ print(torch.cuda.is_available())
 
 If CUDA is not available, you may need to reinstall PyTorch with the correct CUDA version. Use the following command, ensuring it matches your installed CUDA version:
 
-For example, if you have CUDA 12.6 installed:
+For example, if you have CUDA 11.2 installed:
 
 ```bash
-pip install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu126
+pip install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu112
 ```
 
 You can find the correct command on the official PyTorch installation page.
@@ -176,3 +230,30 @@ After reinstalling PyTorch with CUDA support, run the following command again to
 import torch
 print(torch.cuda.is_available())
 ```
+
+## License
+
+This project is licensed under the GNU Affero General Public License v3.0 (AGPL) - see the [LICENSE](https://github.com/talfig/Sign-Language-Recognition/blob/main/LICENSE) file for details.
+
+## Contact
+
+<div align="left">
+<table>
+  <tr>
+    <td align="center">
+      <a href="https://www.linkedin.com/in/talfig/" target="_blank">
+        <img src="https://bentos.jkominovic.dev/api/v1/bento-cards?url=https%3A%2F%2Fwww.linkedin.com%2Fin%2Ftalfig%2F&subtitle=@Tal+Figenblat&size=square" alt="talfig">
+      </a>
+    </td>
+    <td colspan="3" align="center">
+      <a href="mailto:talfig8@gmail.com" target="_blank">
+        <img src="https://bentos.jkominovic.dev/api/v1/generic-card?icon=sigmail&subtitle=talfig8@gmail.com&size=square" alt="talfig8" style="margin: 10px;">
+      </a>
+    </td>
+  </tr>
+</table>
+</div>
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/talfig/talfig/main/gratitude.svg" alt="Gratitude Image">
+</p>
