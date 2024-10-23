@@ -6,6 +6,41 @@
     </a>
 </p>
 
+## Project Overview
+
+The core objective of this project is to provide accurate and fast classification of hand signs based on real-time input. It is implemented using several well-known libraries:
+
+1. **MediaPipe Hands Model**: This model detects and tracks hand landmarks in real-time, offering high accuracy in hand position recognition. It provides 21 key points (landmarks) for each hand and tracks multiple hands in a video frame, which are used for further sign classification.
+   
+2. **PyTorch Classification Model**: A pre-trained model, based on a modified **MobileNet** architecture, is used to classify hand signs. The model has been trained using a dataset of hand sign images, with its weights stored in the file `asl_crop_v2_mobilenet_weights_epoch_10.pth`. This model outputs probabilities for different hand sign classes, and a confidence threshold is applied to ensure accurate predictions.
+
+## Main Features
+
+1. **Hand Tracking and Detection**: The **MediaPipe Hands** model is responsible for detecting the user's hand in the video feed and extracting key hand landmarks. These landmarks are essential for determining hand orientation and positioning, which feeds into the classification process.
+   
+2. **Sign Classification**: Once the hand is detected and the landmarks are identified, the processed landmarks are passed into the PyTorch classification model. The classifier predicts the hand sign based on the detected landmarks. The model has been trained on a variety of hand gestures to recognize different signs accurately.
+
+3. **Real-time Video Processing**: The application continuously processes webcam frames, applying the hand tracking model, running sign classification, and displaying the results in a GUI. A **confidence threshold** of 0.7 is applied, meaning that only predictions with high certainty are shown to the user. Additionally, predictions are averaged over the last 5 frames to smooth out any jitter or instability in the real-time predictions.
+
+4. **Custom Hand Landmarks Display**: The hand landmarks are visually represented in the output video stream. Each part of the hand (fingers, palm, etc.) is color-coded for better clarity. This visualization helps the user see the points being tracked and how they correspond to the predicted hand sign.
+
+## Application Flow
+
+1. **Webcam Input**: The app captures live video input from the webcam.
+2. **Hand Detection**: The **MediaPipe** model processes each frame, detects the hands, and extracts landmarks.
+3. **Hand Sign Classification**: The detected landmarks are passed to the PyTorch model, which predicts the hand sign.
+4. **Display**: The video feed is displayed through a graphical interface, with hand landmarks and classification results overlaid.
+
+## Models Used
+
+### 1. **MediaPipe Hands**:
+   - MediaPipe Hands provides robust hand detection and tracking capabilities by identifying 21 landmarks on each hand. It works well under different lighting conditions and can detect multiple hands in a single frame.
+   - This model ensures that only the precise hand region is analyzed, which is essential for the classification step.
+
+### 2. **PyTorch Hand Sign Classifier**:
+   - The classification model is based on the **MobileNet** architecture, which has been fine-tuned for the task of hand sign recognition. MobileNet is a lightweight model designed for mobile and embedded vision tasks, making it an efficient choice for real-time applications.
+   - The classifier takes hand landmarks as input and predicts the hand sign from a predefined set of classes. The model used in this project was trained for 10 epochs, and its weights are stored in the file `asl_crop_v2_mobilenet_weights_epoch_10.pth`.
+
 ## CUDA and cuDNN Installation Guide for Project (Windows & Ubuntu)
 
 ### 1. Downloading and Installing CUDA
