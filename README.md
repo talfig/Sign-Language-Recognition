@@ -12,7 +12,7 @@ The core objective of this project is to provide accurate and fast classificatio
 
 1. **MediaPipe Hands Model**: This model detects and tracks hand landmarks in real-time, offering high accuracy in hand position recognition. It provides 21 key points (landmarks) for each hand and tracks multiple hands in a video frame, which are used for further sign classification.
    
-2. **PyTorch Classification Model**: A pre-trained model, based on a modified **MobileNet** architecture, is used to classify hand signs. The model has been trained using a dataset of hand sign images, with its weights stored in the file `asl_crop_v2_mobilenet_weights_epoch_10.pth`. This model outputs probabilities for different hand sign classes, and a confidence threshold is applied to ensure accurate predictions.
+2. **PyTorch Classification Model**: Initially, a **ResNet18** model was tested but resulted in lower accuracy. Consequently, a pre-trained **MobileNet** architecture was adopted, which provides superior accuracy in classifying hand signs. The model has been trained using a dataset of hand sign images, with its weights stored in the file `asl_crop_v2_mobilenet_weights_epoch_10.pth`. This model outputs probabilities for different hand sign classes, and a confidence threshold is applied to ensure accurate predictions.
 
 ## Main Features
 
