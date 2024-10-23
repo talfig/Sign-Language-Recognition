@@ -200,3 +200,30 @@ After reinstalling PyTorch with CUDA support, run the following command again to
 import torch
 print(torch.cuda.is_available())
 ```
+
+## License
+
+This project is licensed under the GNU Affero General Public License v3.0 (AGPL) - see the [LICENSE](https://github.com/talfig/Sign-Language-Recognition/blob/main/LICENSE) file for details.
+
+## Contact
+
+<div align="left">
+<table>
+  <tr>
+    <td align="center">
+      <a href="https://www.linkedin.com/in/talfig/" target="_blank">
+        <img src="https://bentos.jkominovic.dev/api/v1/bento-cards?url=https%3A%2F%2Fwww.linkedin.com%2Fin%2Ftalfig%2F&subtitle=@Tal+Figenblat&size=square" alt="talfig">
+      </a>
+    </td>
+    <td colspan="3" align="center">
+      <a href="mailto:talfig8@gmail.com" target="_blank">
+        <img src="https://bentos.jkominovic.dev/api/v1/generic-card?icon=sigmail&subtitle=talfig8@gmail.com&size=square" alt="talfig8" style="margin: 10px;">
+      </a>
+    </td>
+  </tr>
+</table>
+</div>
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/talfig/talfig/main/gratitude.svg" alt="Gratitude Image">
+</p>
