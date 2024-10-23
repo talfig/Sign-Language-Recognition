@@ -202,10 +202,10 @@ print(torch.cuda.is_available())
 
 If CUDA is not available, you may need to reinstall PyTorch with the correct CUDA version. Use the following command, ensuring it matches your installed CUDA version:
 
-For example, if you have CUDA 12.6 installed:
+For example, if you have CUDA 11.2 installed:
 
 ```bash
-pip install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu126
+pip install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu112
 ```
 
 You can find the correct command on the official PyTorch installation page.
