@@ -21,7 +21,7 @@ def augment_image(image):
         noise = np.random.randint(0, 20, image.shape, dtype='uint8')
         return cv2.add(image, noise)
     elif aug_type == 'zoom':
-        zoom_factor = random.uniform(0.7, 1.3)  # Zoom between 80% and 120%
+        zoom_factor = random.uniform(0.7, 1.3)  # Zoom between 70% and 130%
         h, w, _ = image.shape
         new_h, new_w = int(h * zoom_factor), int(w * zoom_factor)
         resized_image = cv2.resize(image, (new_w, new_h))
