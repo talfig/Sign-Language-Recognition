@@ -248,7 +248,7 @@ This project is licensed under the GNU Affero General Public License v3.0 (AGPL)
         </a>
       </td>
       <td align="center">
-        <a href="mailto:talfig8@gmail.com" target="_blank">
+        <a href="mailto:talfigw@gmail.com" target="_blank">
           <img src="https://upload.wikimedia.org/wikipedia/commons/4/4e/Mail_%28iOS%29.svg" alt="Email" width="80" height="80">
           <br>
           Email
