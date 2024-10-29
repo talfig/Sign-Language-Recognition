@@ -238,20 +238,24 @@ This project is licensed under the GNU Affero General Public License v3.0 (AGPL)
 ## Contact
 
 <div align="left">
-<table>
-  <tr>
-    <td align="center">
-      <a href="https://www.linkedin.com/in/talfig/" target="_blank">
-        <img src="https://bentos.jkominovic.dev/api/v1/bento-cards?url=https%3A%2F%2Fwww.linkedin.com%2Fin%2Ftalfig%2F&subtitle=@Tal+Figenblat&size=square" alt="talfig">
-      </a>
-    </td>
-    <td colspan="3" align="center">
-      <a href="mailto:talfig8@gmail.com" target="_blank">
-        <img src="https://bentos.jkominovic.dev/api/v1/generic-card?icon=sigmail&subtitle=talfig8@gmail.com&size=square" alt="talfig8" style="margin: 10px;">
-      </a>
-    </td>
-  </tr>
-</table>
+  <table>
+    <tr>
+      <td align="center">
+        <a href="https://www.linkedin.com/in/talfig/" target="_blank">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" alt="LinkedIn" width="50" height="50">
+          <br>
+          LinkedIn
+        </a>
+      </td>
+      <td align="center">
+        <a href="mailto:talfig8@gmail.com" target="_blank">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/4/4e/Mail_%28iOS%29.svg" alt="Email" width="50" height="50">
+          <br>
+          Email Me
+        </a>
+      </td>
+    </tr>
+  </table>
 </div>
 
 <p align="center">
