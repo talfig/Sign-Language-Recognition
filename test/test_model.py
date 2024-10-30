@@ -16,7 +16,7 @@ transform = transforms.Compose([
     transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
 ])
 
-test_dataset = ASLDataset(X, y, transform=transform)
-test_loader = DataLoader(test_dataset, batch_size=100, shuffle=False)
+val_dataset = ASLDataset(X, y, transform=transform)
+val_loader = DataLoader(val_dataset, batch_size=100, shuffle=False)
 
-evaluate_model(model, test_loader, device)
+evaluate_model(model, val_loader, device)

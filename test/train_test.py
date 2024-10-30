@@ -33,8 +33,8 @@ def train_evaluate(npz_file):
     train_dataset = ASLDataset(X_train, y_train, transform=transform)
     train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
 
-    test_dataset = ASLDataset(X_test, y_test, transform=transform)
-    test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
+    val_dataset = ASLDataset(X_test, y_test, transform=transform)
+    val_loader = DataLoader(val_dataset, batch_size=batch_size, shuffle=False)
 
     # Initialize the model
     model = CustomMobileNetV2(num_classes=num_classes)
@@ -45,9 +45,9 @@ def train_evaluate(npz_file):
     loss_fn = nn.CrossEntropyLoss()
     optimizer = optim.Adam(model.parameters(), lr=learning_rate)
 
-    train_model(model, train_loader, num_epochs, loss_fn, optimizer, device)
+    train_model(model, train_loader, val_loader, num_epochs, loss_fn, optimizer, device)
 
-    evaluate_model(model, test_loader, device)
+    evaluate_model(model, val_loader, device)
 
 
 if __name__ == "__main__":
