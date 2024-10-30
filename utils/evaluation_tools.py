@@ -21,8 +21,8 @@ def plot_performance_history(train_losses, val_losses, train_accuracies, val_acc
 
     # Accuracy subplot
     plt.subplot(1, 2, 2)
-    plt.plot(train_accuracies, label='Training Accuracy', color='green', linestyle='-')
-    plt.plot(val_accuracies, label='Validation Accuracy', color='red', linestyle='--')
+    plt.plot(train_accuracies, label='Training Accuracy', color='blue', linestyle='-')
+    plt.plot(val_accuracies, label='Validation Accuracy', color='orange', linestyle='--')
     plt.xlabel('Epoch')
     plt.ylabel('Accuracy')
     plt.title('Training and Validation Accuracy over Epochs')
