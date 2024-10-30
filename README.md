@@ -68,7 +68,7 @@ The core objective of this project is to provide accurate and fast classificatio
    - This model ensures that only the precise hand region is analyzed, which is essential for the classification step.
 
 ### 2. **PyTorch Hand Sign Classifier**:
-   - The classification model is based on the **MobileNet** architecture, which has been fine-tuned for the task of hand sign recognition. MobileNet is a lightweight model designed for mobile and embedded vision tasks, making it an efficient choice for real-time applications.
+   - The classification model is based on the **MobileNet** architecture, which has been fine-tuned for the task of hand sign recognition. **MobileNet** is a lightweight model designed for mobile and embedded vision tasks, making it an efficient choice for real-time applications.
    - The classifier takes hand landmarks as input and predicts the hand sign from a predefined set of classes. The model used in this project was trained for 10 epochs, and its weights are stored in the file `asl_crop_v2_mobilenet_weights_epoch_10.pth`.
 
 ## Installation and Setup
