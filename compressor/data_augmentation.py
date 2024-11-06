@@ -17,9 +17,6 @@ def augment_image(image):
         center = (image.shape[1] // 2, image.shape[0] // 2)
         matrix = cv2.getRotationMatrix2D(center, angle, 1.0)
         return cv2.warpAffine(image, matrix, (image.shape[1], image.shape[0]))
-    elif aug_type == 'noise':
-        noise = np.random.randint(0, 20, image.shape, dtype='uint8')
-        return cv2.add(image, noise)
     elif aug_type == 'zoom':
         zoom_factor = random.uniform(0.7, 1.3)  # Zoom between 70% and 130%
         h, w, _ = image.shape
