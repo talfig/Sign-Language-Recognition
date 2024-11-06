@@ -8,6 +8,7 @@ ASL/
 ASL-crop/
 ASL-MediaPipe/
 data/compressed_asl_crop_v2.npz
+data/compressed_asl_crop_v3.npz
 data/backup/compressed_asl_mediapipe.npz
 data/backup/
 compressor/__pycache__/

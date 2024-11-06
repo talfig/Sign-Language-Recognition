@@ -72,7 +72,7 @@ def train_model(model, train_loader, val_loader, num_epochs, loss_fn, optimizer,
 
         # Save model weights every few epochs
         if (epoch + 1) % 5 == 0:
-            torch.save(model.state_dict(), f'../data/asl_crop_v2_mobilenet_weights_epoch_{epoch + 1}.pth')
+            torch.save(model.state_dict(), f'../data/asl_crop_v3_mobilenet_weights_epoch_{epoch + 1}.pth')
             print(f"Model weights saved for epoch {epoch + 1}.")
 
     print("Training finished.")
