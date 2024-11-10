@@ -7,8 +7,8 @@ import random
 
 # Augmentation functions
 def augment_image(image):
-    # Apply random augmentation techniques (e.g., flipping, rotation, noise, zoom)
-    aug_type = random.choice(['flip', 'rotate', 'noise', 'zoom'])
+    # Apply random augmentation techniques (e.g., flipping, rotation, noise, zoom, shifting)
+    aug_type = random.choice(['flip', 'rotate', 'noise', 'zoom', 'shift'])
 
     if aug_type == 'flip':
         return cv2.flip(image, 1)  # Horizontal flip
@@ -36,5 +36,11 @@ def augment_image(image):
             y_offset = (h - new_h) // 2
             canvas[y_offset:y_offset + new_h, x_offset:x_offset + new_w] = resized_image
             return canvas
+    elif aug_type == 'shift':
+        # Shift by a random number of pixels within a range
+        max_shift = 20  # Maximum shift in pixels
+        dx, dy = random.randint(-max_shift, max_shift), random.randint(-max_shift, max_shift)
+        matrix = np.float32([[1, 0, dx], [0, 1, dy]])
+        return cv2.warpAffine(image, matrix, (image.shape[1], image.shape[0]))
 
     return image

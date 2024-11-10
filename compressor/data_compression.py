@@ -2,7 +2,7 @@
 
 import os
 from sklearn.utils import shuffle
-from compressor.data_augmentation import *
+from .data_augmentation import *
 
 
 # Function to get the number of images per class and the maximum count

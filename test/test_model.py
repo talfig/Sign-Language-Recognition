@@ -1,6 +1,10 @@
 # test/test_model.py
 
-from test import *
+from torchvision import transforms
+from torch.utils.data import DataLoader
+
+from .evaluate_model import *
+from compressor import *
 
 # Load the .npz dataset
 X, y = decompress_npz('../data/compressed_asl_crop_v3.npz')

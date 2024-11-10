@@ -1,4 +1,5 @@
 # model/__init__.py
 
-from model.asl_dataset import *
-from model.cnn_models import *
+from .asl_dataset import *
+from .cnn_models import *
+from .attention_layers import *

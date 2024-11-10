@@ -1,3 +1,4 @@
 # train/__init__.py
 
-from train.train_model import *
+from .train_model import *
+from .train_evaluate import *
