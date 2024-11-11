@@ -40,12 +40,8 @@ def train_evaluate(npz_file):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model.to(device)
 
-    # Calculate class weights
-    class_weights = compute_class_weight('balanced', classes=np.unique(labels), y=labels)
-    class_weights = torch.tensor(class_weights, dtype=torch.float).to(device)  # Send to device for GPU compatibility
-
-    # Define loss with class weights and optimizer
-    loss_fn = nn.CrossEntropyLoss(weight=class_weights)
+    # Define loss and optimizer
+    loss_fn = nn.CrossEntropyLoss()
     optimizer = optim.Adam(model.parameters(), lr=learning_rate)
 
     train_model(model, train_loader, val_loader, num_epochs, loss_fn, optimizer, device)
