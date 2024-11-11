@@ -4,7 +4,7 @@ import torch
 import string
 from torchsummary import summary
 import torch.nn.functional as F
-from .attention_layers import *
+from model.attention_layers import *
 from torchvision.models import (
     mobilenet_v2, MobileNet_V2_Weights,
     resnet18, ResNet18_Weights

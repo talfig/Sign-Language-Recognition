@@ -3,7 +3,7 @@
 from torchvision import transforms
 from torch.utils.data import DataLoader
 
-from .evaluate_model import *
+from test.evaluate_model import *
 from compressor import *
 
 # Load the .npz dataset
