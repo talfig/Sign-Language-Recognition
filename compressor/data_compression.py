@@ -20,7 +20,7 @@ def get_class_counts(dataset_dir):
 
 
 # Resize, augment, and save images in compressed .npz format
-def balance_compress_npz(dataset_dir, output_file, image_size=(224, 224), base_aug=500):
+def balance_compress_npz(dataset_dir, output_file, image_size=(224, 224), base_aug=1000):
     images = []
     labels = []
 
