@@ -7,8 +7,8 @@ import random
 
 # Augmentation functions
 def augment_image(image):
-    # Apply random augmentation techniques (e.g., flipping, rotation, noise, zoom, shifting)
-    aug_type = random.choice(['flip', 'rotate', 'noise', 'zoom', 'shift'])
+    # Apply random augmentation techniques (e.g., flipping, rotation, noise, zoom, shifting, bluring)
+    aug_type = random.choice(['flip', 'rotate', 'noise', 'zoom', 'shift', 'blur'])
 
     if aug_type == 'flip':
         return cv2.flip(image, 1)  # Horizontal flip
@@ -42,5 +42,9 @@ def augment_image(image):
         dx, dy = random.randint(-max_shift, max_shift), random.randint(-max_shift, max_shift)
         matrix = np.float32([[1, 0, dx], [0, 1, dy]])
         return cv2.warpAffine(image, matrix, (image.shape[1], image.shape[0]))
+    elif aug_type == 'blur':
+        # Apply Gaussian blur with a random kernel size
+        ksize = random.choice([3, 5, 7])  # Choose a kernel size; larger values produce stronger blurring
+        return cv2.GaussianBlur(image, (ksize, ksize), 0)
 
     return image
