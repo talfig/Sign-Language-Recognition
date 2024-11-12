@@ -20,7 +20,7 @@ def get_class_counts(dataset_dir):
 
 
 # Resize, augment, and save images in compressed .npz format
-def balance_compress_npz(dataset_dir, output_file, image_size=(224, 224), base_aug=1000):
+def balance_compress_npz(dataset_dir, output_file, image_size=(224, 224), base_aug=500):
     images = []
     labels = []
 
@@ -75,4 +75,4 @@ def decompress_npz(npz_file):
 
 
 if __name__ == "__main__":
-    balance_compress_npz('../ASL-crop', '../data/compressed_asl_crop_v5.npz')
+    balance_compress_npz('../ASL-crop', '../data/compressed_asl_crop_v4.npz')
