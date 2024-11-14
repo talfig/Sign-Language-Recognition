@@ -90,8 +90,15 @@ class HandDetectionApp:
 
         # Create a label to display the sentence
         self.sentence = ""
-        self.sentence_label = Label(self.window, text="", font=("Arial", 18), bg="#333333", fg="white", wraplength=800)
-        self.sentence_label.pack(pady=20)
+
+        # Create a frame to serve as the cool outbox for the sentence
+        sentence_frame = Frame(self.window, bg="#555555", bd=4, relief=tk.RAISED)
+        sentence_frame.pack(pady=20, padx=20)
+
+        # Create a label to display the sentence inside the frame
+        self.sentence_label = Label(sentence_frame, text="", font=("Arial", 18), bg="#333333", fg="white",
+                                    wraplength=800, padx=10, pady=10)
+        self.sentence_label.pack()
 
         self.running = False  # Control the flow of video feed
         self.imgtk = None  # Store the image to prevent garbage collection
