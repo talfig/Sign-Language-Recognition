@@ -44,6 +44,12 @@ The core objective of this project is to provide accurate and fast classificatio
    
 2. **PyTorch Classification Model**: Initially, a custom CNN was developed and analyzed for accuracy optimization. Following this, **ResNet18** was tested but yielded lower accuracy. Consequently, a pre-trained **MobileNetV2** architecture was adopted, which provides superior accuracy in classifying hand signs. This model was fine-tuned using a dataset of hand sign images, with its weights saved in `asl_crop_v4_1_mobilenet_weights`. The model outputs probabilities for different hand sign classes, applying a confidence threshold to ensure accurate predictions.
 
+## Demo
+
+<p align="center">
+  <img src="https://github.com/talfig/Sign-Language-Recognition/blob/main/demo.gif" alt="Demo Video">
+</p>
+
 ## Main Features
 
 1. **Hand Tracking and Detection**: The **MediaPipe Hands** model is responsible for detecting the user's hand in the video feed and extracting key hand landmarks. These landmarks are essential for determining hand orientation and positioning, which feeds into the classification process.
