@@ -187,8 +187,7 @@ def make_prediction(app, frame):
 
     if results.multi_hand_landmarks:
         for idx, hand_landmarks in enumerate(results.multi_hand_landmarks):
-            if idx > 1:
-                print(f"Warning: Too many hands detected")
+            if idx > 0:
                 break
 
             orig_features_mask = np.zeros_like(frame)
