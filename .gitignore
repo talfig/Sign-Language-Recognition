@@ -9,7 +9,7 @@ ASL-crop/
 ASL-MediaPipe/
 WLASL/
 data/compressed_asl*.npz
-demo.mp4
+demo*
 data/backup/compressed_asl_mediapipe.npz
 data/backup/
 compressor/__pycache__/
