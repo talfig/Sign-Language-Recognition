@@ -20,9 +20,11 @@ class HandDetectionApp:
         self.hands = mp.solutions.hands.Hands(min_detection_confidence=0.7, min_tracking_confidence=0.7)
 
         # Define constants
-        self.PREDICTION_WINDOW = 6  # Number of frames to average over
+        self.PREDICTION_WINDOW = 10  # Number of frames to average over
+        self.PREDICTION_DELAY = 2  # Small delay between predictions (in seconds)
         self.CONFIDENCE_THRESHOLD = 0.7  # Only consider predictions with confidence > 0.7
-        self.multi_predictions_queue = [deque(maxlen=self.PREDICTION_WINDOW) for _ in range(2)]
+        self.predictions_queue = deque(maxlen=self.PREDICTION_WINDOW)
+        self.last_prediction_time = 0  # Time of the last prediction
 
         # Set up the model
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -76,6 +78,21 @@ class HandDetectionApp:
                                command=self.window.quit)
         self.btn_exit.grid(row=0, column=2, padx=10)
 
+        # Add a Delete button with a new color
+        self.btn_delete = Button(button_frame, text="Delete", width=12, font=("Arial", 14), bg="#FF4081", fg="white",
+                                 command=self.delete_last_sign)
+        self.btn_delete.grid(row=1, column=0, padx=10, pady=10)
+
+        # Add a Space button with a new color
+        self.btn_space = Button(button_frame, text="Space", width=12, font=("Arial", 14), bg="#00BCD4", fg="white",
+                                command=self.add_space)
+        self.btn_space.grid(row=1, column=1, padx=10, pady=10)
+
+        # Create a label to display the sentence
+        self.sentence = ""
+        self.sentence_label = Label(self.window, text="", font=("Arial", 18), bg="#333333", fg="white", wraplength=800)
+        self.sentence_label.pack(pady=20)
+
         self.running = False  # Control the flow of video feed
         self.imgtk = None  # Store the image to prevent garbage collection
 
@@ -100,8 +117,7 @@ class HandDetectionApp:
                 pass
 
             # Process the frame
-            process_frame(frame, self.hands, self.model, self.transform, self.device,
-                          self.multi_predictions_queue, self.CONFIDENCE_THRESHOLD, self.PREDICTION_WINDOW)
+            process_frame(self, frame)
 
             # Convert the frame to ImageTk format
             img = Image.fromarray(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
@@ -112,6 +128,28 @@ class HandDetectionApp:
 
             # Call update_frame again after a delay (to create a video effect)
             self.window.after(10, self.update_frame)
+
+    def add_to_sentence(self, sign):
+        """Add the recognized sign to the sentence and update the label."""
+        # Build the sentence by adding the new sign
+        self.sentence += sign
+
+        # Update the sentence label
+        self.sentence_label.config(text=self.sentence)
+
+    def delete_last_sign(self):
+        """Delete the last sign from the sentence."""
+        self.sentence = self.sentence[:-1]
+
+        # Update the sentence label
+        self.sentence_label.config(text=self.sentence)
+
+    def add_space(self):
+        """Add a space to the sentence."""
+        self.sentence += " "
+
+        # Update the sentence label
+        self.sentence_label.config(text=self.sentence)
 
     def __del__(self):
         # Release resources

@@ -1,6 +1,7 @@
 # app/frame_utils.py
 
 import cv2
+import time
 import mediapipe as mp
 from utils import *
 
@@ -151,67 +152,73 @@ def draw_hand_features(frame, hand_landmarks):
     )
 
 
-def display_predictions(frame, hand_landmarks, confidence, predicted_sign, predictions_queue, confidence_threshold, prediction_window):
-    if predicted_sign is not None:
-        # Ensure the prediction has high confidence
-        if confidence.item() > confidence_threshold:
-            # Append the prediction to the queue
-            predictions_queue.append(predicted_sign)
+def smooth_predictions(app):
+    """
+    Smooth predictions by returning the most frequent prediction within a set window size.
+    """
+    if len(app.predictions_queue) == app.PREDICTION_WINDOW:
+        # Return the most common prediction
+        smoothed_prediction = max(set(app.predictions_queue), key=app.predictions_queue.count)
 
-            # Get the smoothed prediction
-            smoothed_prediction = smooth_predictions(predictions_queue, prediction_window)
+        # Clear the queue after processing the prediction
+        app.predictions_queue.clear()
 
-            if smoothed_prediction is not None:
-                # Call the function to detect hand landmarks
-                detect_hand_bounds(frame, hand_landmarks, smoothed_prediction)
+        return smoothed_prediction
+
+    return None
 
 
-def process_frame(frame, hands, model, transform, device, multi_predictions_queue, confidence_threshold, prediction_window):
-    # Process the frame to detect hands
-    results = hands.process(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
+def process_frame(app, frame):
+    # Make a prediction based on the current frame
+    prediction = make_prediction(app, frame)
+
+    # If a prediction is made, check the delay for adding it to the sentence
+    if prediction:
+        current_time = time.time()
+        # Check if the delay period has passed
+        if current_time - app.last_prediction_time > app.PREDICTION_DELAY:
+            # Update the last prediction time and add the prediction to the sentence
+            app.last_prediction_time = current_time
+            app.add_to_sentence(prediction)
+
+
+def make_prediction(app, frame):
+    results = app.hands.process(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
 
     if results.multi_hand_landmarks:
         for idx, hand_landmarks in enumerate(results.multi_hand_landmarks):
-            # Create a black background frame
+            if idx > 1:
+                print(f"Warning: Too many hands detected")
+                break
+
             orig_features_mask = np.zeros_like(frame)
-
-            # Draw palm connections and landmarks
             draw_hand_features(frame, hand_landmarks)
-
-            # Extract hand features from the frame based on detected landmarks
             extract_hand_features_mask(orig_features_mask, hand_landmarks)
             mirror_features_mask = cv2.flip(orig_features_mask, 1)
 
-            # Preprocess the frame with landmarks for model prediction
-            orig_input_image = transform(orig_features_mask).unsqueeze(0).to(device)
-            mirror_input_image = transform(mirror_features_mask).unsqueeze(0).to(device)
+            orig_input_image = app.transform(orig_features_mask).unsqueeze(0).to(app.device)
+            mirror_input_image = app.transform(mirror_features_mask).unsqueeze(0).to(app.device)
 
-            # Make predictions using the model
             with torch.no_grad():
-                orig_output = model(orig_input_image)
-                mirror_output = model(mirror_input_image)
+                orig_output = app.model(orig_input_image)
+                mirror_output = app.model(mirror_input_image)
 
-                # Get the maximum prediction score between original and mirrored output
                 final_output = torch.max(orig_output, mirror_output)
                 confidence, predicted_class = torch.max(final_output, 1)
 
-                # Convert the predicted class index to a sign label (string)
-                predicted_sign = LabelMapper.index_to_label(predicted_class.item())
+                if confidence.item() > app.CONFIDENCE_THRESHOLD:
+                    predicted_sign = LabelMapper.index_to_label(predicted_class.item())
 
-                # Check if idx is within bounds of multi_predictions_queue
-                if idx < len(multi_predictions_queue):
-                    # Display the predicted sign
-                    display_predictions(frame, hand_landmarks, confidence, predicted_sign, multi_predictions_queue[idx],
-                                        confidence_threshold, prediction_window)
-                else:
-                    # Handle the case when idx is out of bounds
-                    print(f"Warning: idx {idx} is out of bounds for multi_predictions_queue.")
+                    # Add the prediction to the queue and smooth it
+                    app.predictions_queue.append(predicted_sign)
+                    smoothed_prediction = smooth_predictions(app)
 
+                    if smoothed_prediction:
+                        # Draw detected hand bounds with the smoothed prediction
+                        detect_hand_bounds(frame, hand_landmarks, smoothed_prediction)
 
-def smooth_predictions(predictions_queue, prediction_window):
-    if len(predictions_queue) == prediction_window:
-        # Calculate the mode (most frequent prediction in the window)
-        most_common_prediction = max(set(predictions_queue), key=predictions_queue.count)
-        return most_common_prediction
-    else:
-        return None  # Not enough frames for smoothing yet
+                        # Display the smoothed prediction immediately (on frame)
+                        return smoothed_prediction  # Return prediction to be displayed immediately
+
+    # Return None if no valid prediction is made
+    return None

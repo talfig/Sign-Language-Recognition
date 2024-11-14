@@ -8,17 +8,12 @@ import random
 # Function to augment the image with multiple techniques
 def augment_image(image, num_augmentations=2):
     """Apply multiple random augmentations to an image."""
-    augmentations = ['flip', 'rotate', 'noise', 'zoom', 'shift']
+    augmentations = ['flip', 'zoom', 'shift']
     selected_augmentations = random.sample(augmentations, num_augmentations)
 
     for aug_type in selected_augmentations:
         if aug_type == 'flip':
             image = cv2.flip(image, 1)  # Horizontal flip
-        elif aug_type == 'rotate':
-            angle = random.choice([90, 180, 270])
-            center = (image.shape[1] // 2, image.shape[0] // 2)
-            matrix = cv2.getRotationMatrix2D(center, angle, 1.0)
-            image = cv2.warpAffine(image, matrix, (image.shape[1], image.shape[0]))
         elif aug_type == 'zoom':
             zoom_factor = random.uniform(0.7, 1.3)
             h, w, _ = image.shape

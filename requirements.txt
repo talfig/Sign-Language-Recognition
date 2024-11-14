@@ -9,3 +9,5 @@ Pillow
 scikit-learn
 seaborn
 mediapipe
+openai
+pyttsx3
