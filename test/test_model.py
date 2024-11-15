@@ -7,7 +7,7 @@ from test.evaluate_model import *
 from compressor import *
 
 # Load the .npz dataset
-X, y = decompress_npz('../data/compressed_asl_crop_v3.npz')
+X, y = decompress_npz('../data/compressed_asl_crop_v4.npz')
 
 # Load the model
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
