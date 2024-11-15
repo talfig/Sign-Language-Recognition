@@ -10,6 +10,7 @@ ASL-MediaPipe/
 WLASL/
 data/compressed_asl*.npz
 demo*
+graphviz.svg
 data/backup/compressed_asl_mediapipe.npz
 data/backup/
 compressor/__pycache__/
