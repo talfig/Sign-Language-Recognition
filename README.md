@@ -56,7 +56,7 @@ The core objective of this project is to provide accurate and fast classificatio
    
 2. **Sign Classification**: Once the hand is detected and the landmarks are identified, the processed landmarks are passed into the PyTorch classification model. The classifier predicts the hand sign based on the detected landmarks. The model has been trained on a variety of hand gestures to recognize different signs accurately.
 
-3. **Real-time Video Processing**: The application continuously processes webcam frames, applying the hand tracking model, running sign classification, and displaying the results in a GUI. A **confidence threshold** of 0.7 is applied, meaning that only predictions with high certainty are shown to the user. Additionally, predictions are averaged over the last 5 frames to smooth out any jitter or instability in the real-time predictions.
+3. **Real-time Video Processing**: The application continuously processes webcam frames, applying the hand tracking model, running sign classification, and displaying the results in a GUI. A **confidence threshold** of 0.7 is applied, meaning that only predictions with high certainty are shown to the user. Additionally, predictions are averaged over the last 10 frames to smooth out any jitter or instability in the real-time predictions.
 
 4. **Custom Hand Landmarks Display**: The hand landmarks are visually represented in the output video stream. Each part of the hand (fingers, palm, etc.) is color-coded for better clarity. This visualization helps the user see the points being tracked and how they correspond to the predicted hand sign.
 
