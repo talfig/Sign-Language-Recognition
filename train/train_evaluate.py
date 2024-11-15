@@ -50,4 +50,4 @@ def train_evaluate(npz_file):
 
 
 if __name__ == "__main__":
-    train_evaluate('../data/compressed_asl_crop_v3.npz')
+    train_evaluate('../data/backup/compressed_asl_crop_v3.npz')
