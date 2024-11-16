@@ -2,7 +2,6 @@
 
 import torch.optim as optim
 from sklearn.model_selection import train_test_split
-from sklearn.utils.class_weight import compute_class_weight
 
 from test import *
 from train.train_model import *
