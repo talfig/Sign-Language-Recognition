@@ -4,6 +4,7 @@ import cv2
 import numpy as np
 import random
 
+
 def augment_image(image, num_augmentations=2):
     """
     Apply a series of random augmentations (flip, zoom, shift) to the input image.
